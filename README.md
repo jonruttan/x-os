@@ -1,2 +1,75 @@
 # x-os
-A bootable image and a container holding the Linux kernel, x and its languages
+
+The Linux kernel, [x](https://github.com/jonruttan/x-lang) and its languages,
+as a container and as a bootable image. It boots into
+[x-ash](https://github.com/jonruttan/x-ash) and its commands are
+[x-coreutils](https://github.com/jonruttan/x-coreutils).
+
+```
+$ docker run -it x-os
+ASH Shell v0.1.0 on x-lang 9e0b1d04b5ef, engine v0.2.14
+exit or ctrl-d to leave
+# uname -m
+aarch64
+```
+
+## What is in it
+
+| Path | What |
+|---|---|
+| `/lib/ld-musl-*.so.1` | musl: the loader and the C library, one file |
+| `/usr/libexec/x/x-bin` | the engine |
+| `/usr/libexec/x/launch` | the launcher |
+| `/usr/share/x` | the library, the langs and their state images |
+| `/usr/share/x/launch` | one boot stream a command |
+| `/bin`, `/init` | links to the launcher |
+
+The container is that root. The bootable image is the same root as an
+initramfs, beside a kernel; the kernel is Alpine's `linux-virt`.
+
+There is no shell but x-ash and no C program but the launcher and the engine.
+
+## How a command starts
+
+The engine reads its program from descriptor 0 and finds the caller's input on
+descriptor 3. `launch` puts a prepared boot stream on 0, the caller's input on
+3, and runs the engine. The command's name picks the stream:
+`/usr/share/x/launch/NAME` when there is one, and otherwise the coreutils
+stream, with the name passed as the applet.
+
+A boot stream is the text the `x` wrapper pipes for a lang booted from its
+state image. `tools/stream.sh` writes it when the image is built.
+
+## Process 1
+
+`init/init.x` mounts `/proc`, `/sys`, `/dev`, `/tmp` and `/run`, starts the
+shell in its own session with the terminal as its controlling terminal,
+collects every child that ends, and starts the shell again when it ends.
+
+`poweroff`, `reboot` and `halt` are `init/power.x`: they flush and make the
+`reboot` system call. Nothing is signalled first.
+
+## Building
+
+```bash
+make test
+```
+
+`make help` lists the targets. `ARCH` is `amd64` or `arm64` and defaults to
+the host's. The build needs Docker, and the boot test needs QEMU.
+
+The builder is Alpine with a C compiler, a shell and make. None of it reaches
+the image.
+
+## Pins
+
+`pins.xon` names each source by commit. `make fetch` acquires them into
+`build/src` and refuses a checkout whose commit is not the one named.
+
+## Limits
+
+- x-coreutils reads file metadata through system calls made by number, which
+  on arm64 Linux name other calls. `ls` fails there.
+- A language that boots from source needs about 4 GB. The image boots each
+  lang from its state image.
+- ctrl-C at the prompt ends the shell; process 1 starts another.
