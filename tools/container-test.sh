@@ -56,7 +56,7 @@ expected='^shell-ok$
 ^x-piped-42$
 ^x-awk-42$
 ^1007$
-^python-says-1267650600228229401496703205376$'
+^\(>>> \)\{0,1\}python-says-1267650600228229401496703205376$'
 
 if ! out=$(script | docker run --rm -i --platform "$platform" \
 	--memory "${TEST_MEM:-3g}" --pids-limit 256 "$image" 2>&1); then
