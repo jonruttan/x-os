@@ -39,6 +39,13 @@ command_rows() {
 	printf '%s\n' "$rows"
 }
 
+# An image written while another's compiled code is cached lacks what the
+# cache answered for, and a boot from it, with no cache, compiles that again.
+# So each image is written from an empty cache.
+clear_code_cache() {
+	rm -f /tmp/x-asm-*
+}
+
 # Every source but the platform is a lang.  All are installed before any is
 # imaged, since a lang may require another.
 install_langs() {
@@ -46,6 +53,7 @@ install_langs() {
 		if [ ! -f "$dir/lang.xon" ]; then
 			continue
 		fi
+		clear_code_cache
 		make -C "$dir" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$dir/.commit")"
 	done
 }
@@ -58,6 +66,7 @@ image_langs() {
 			continue
 		fi
 		name=$(lang_name "$dir")
+		clear_code_cache
 		x --image -l "$name"
 		if [ ! -f "$share/langs/$name/.images/$name.boot.x.ximg" ]; then
 			fail 1 "no state image for $name"
@@ -71,6 +80,7 @@ image_dialects() {
 	cache=$(mktemp -d)
 	mkdir -p "$share/images"
 	for dialect in "$@"; do
+		clear_code_cache
 		XDG_CACHE_HOME="$cache" x --image -l "$dialect"
 		cp "$cache"/x/images/*/"$dialect.boot.x.ximg" "$share/images/"
 	done
