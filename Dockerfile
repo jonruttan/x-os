@@ -30,22 +30,36 @@ RUN rm -f engine/x-engine-build.xon \
 # Out of the checkout: with lib/x.x in the working directory the wrapper runs
 # in repo mode and does not see the installed langs.
 WORKDIR /src
-COPY build/src/x-ash /src/x-ash
-COPY build/src/x-coreutils /src/x-coreutils
-RUN make -C /src/x-coreutils install PREFIX=/usr \
-      LANG_VERSION="$(cut -c1-12 /src/x-coreutils/.commit)" \
- && x --image -l coreutils
-RUN make -C /src/x-ash install PREFIX=/usr \
-      LANG_VERSION="$(cut -c1-12 /src/x-ash/.commit)"
+COPY build/src /src/all
+# Every source but the platform is a lang.  All are installed before any is
+# imaged, since a lang may require another.  One that writes no image boots
+# from source, which the image has no wrapper to do, so that is an error.
+RUN for d in /src/all/*/; do \
+      [ -f "$d/lang.xon" ] || continue; \
+      make -C "$d" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$d/.commit")" || exit 1; \
+    done
+RUN for d in /src/all/*/; do \
+      [ -f "$d/lang.xon" ] || continue; \
+      lang=$(sed -n 's/^(lang "\(.*\)").*/\1/p' "$d/lang.xon"); \
+      x --image -l "$lang" || exit 1; \
+      [ -f "/usr/share/x/langs/$lang/.images/$lang.boot.x.ximg" ] \
+        || { echo "no state image for $lang" >&2; exit 1; }; \
+    done
 
 COPY tools/stream.sh /src/stream.sh
 COPY init /src/init
-RUN sh /src/stream.sh ash sh && sh /src/stream.sh coreutils coreutils \
+COPY commands.xon /src/commands.xon
+RUN sh /src/stream.sh coreutils coreutils \
+ && sed -n 's/^(command[[:space:]]\{1,\}\([a-z0-9-]*\)[[:space:]]\{1,\}\([a-z0-9-]*\)).*/\1 \2/p' \
+      /src/commands.xon > /src/commands \
+ && [ "$(grep -c '^(command' /src/commands.xon)" = "$(grep -c . /src/commands)" ] \
+ && while read -r name lang; do sh /src/stream.sh "$lang" "$name" || exit 1; done < /src/commands \
  && sh /src/stream.sh ash init /src/init/init.x \
  && for how in poweroff reboot halt; do \
       sh /src/stream.sh ash "$how" /src/init/power.x "(def %power-how (lit $how))" || exit 1; \
     done
 
+COPY etc /src/etc
 COPY launch /src/launch
 RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c
 
@@ -59,12 +73,13 @@ RUN mkdir -p /rootfs/lib /rootfs/bin /rootfs/usr/libexec /rootfs/usr/share \
  && rm -rf /rootfs/usr/share/x/tests \
  && mkdir -p /rootfs/run \
  && ln -s /usr/libexec/x/launch /rootfs/init \
- && ln -s /usr/libexec/x/launch /rootfs/bin/sh \
+ && while read -r name lang; do ln -s /usr/libexec/x/launch "/rootfs/bin/$name" || exit 1; done < /src/commands \
  && for how in poweroff reboot halt; do ln -s /usr/libexec/x/launch "/rootfs/bin/$how"; done \
  && sh /src/stream.sh --applets > /tmp/applets \
  && while read -r a; do [ -e "/rootfs/bin/$a" ] || ln -s /usr/libexec/x/launch "/rootfs/bin/$a"; done < /tmp/applets \
  && printf 'root:x:0:0:root:/root:/bin/sh\n' > /rootfs/etc/passwd \
- && printf 'root:x:0:\n' > /rootfs/etc/group
+ && printf 'root:x:0:\ndaemon:x:1:\n' > /rootfs/etc/group \
+ && cp /src/etc/hello.c /rootfs/etc/hello.c
 
 FROM scratch AS root
 COPY --from=build /rootfs /

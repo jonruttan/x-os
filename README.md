@@ -29,6 +29,20 @@ initramfs, beside a kernel; the kernel is Alpine's `linux-virt`.
 
 There is no shell but x-ash and no C program but the launcher and the engine.
 
+## Commands
+
+| Command | What |
+|---|---|
+| `sh`, `ash` | [x-ash](https://github.com/jonruttan/x-ash) |
+| `grep` | [x-grep](https://github.com/jonruttan/x-grep) |
+| `sed` | [x-sed](https://github.com/jonruttan/x-sed) |
+| `awk` | [x-awk](https://github.com/jonruttan/x-awk) |
+| `cc` | [x-cc](https://github.com/jonruttan/x-cc) |
+| `poweroff`, `reboot`, `halt` | `init/power.x` |
+| every other | an x-coreutils applet |
+
+`commands.xon` names the commands that are a lang of their own.
+
 ## How a command starts
 
 The engine reads its program from descriptor 0 and finds the caller's input on
@@ -77,3 +91,8 @@ what moved. The image is rebuilt and published when that is merged.
 - A language that boots from source needs about 4 GB. The image boots each
   lang from its state image.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
+- The shell takes no arguments: `sh -c COMMAND` and `sh FILE` run nothing.
+  x-make is left out for that reason, since a recipe is run by `sh -c`.
+- x-python is left out: it writes no state image on x-lang v0.16.0.
+- `cc` is x-cc, whose `run` executes a C program. It writes no executable
+  here: what it writes is Mach-O.

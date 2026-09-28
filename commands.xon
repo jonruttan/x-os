@@ -1,0 +1,15 @@
+; commands.xon -- the commands the image has that are a lang of their own.
+;
+; (command NAME LANG): /bin/NAME starts LANG.  A name with no row here is a
+; x-coreutils applet when x-coreutils has one by that name, and is otherwise
+; not a command.  A row wins over an applet of the same name.
+;
+; init and the power commands are not here: they are this repository's own
+; programs, run on a lang's state image (see the Dockerfile).
+
+(command sh      ash)
+(command ash     ash)
+(command grep    grep)
+(command sed     sed)
+(command awk     awk)
+(command cc      cc)
