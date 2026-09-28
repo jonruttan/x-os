@@ -53,7 +53,9 @@ jobs:
         run: |
           sh tools/pins-update.sh > moved.txt
           cat moved.txt
-          if [ -s moved.txt ]; then echo "moved=1" >> "$GITHUB_OUTPUT"; fi
+          if [ -s moved.txt ]; then
+            echo "moved=1" >> "$GITHUB_OUTPUT"
+          fi
       # One branch: an open pull request is brought up to date, and a second
       # one is never opened beside it.  Forced, for the case where the branch
       # was started again from main.

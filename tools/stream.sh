@@ -33,19 +33,37 @@ if [ "$1" = "--applets" ]; then
 	exit 0
 fi
 
-lang="$1"; name="$2"
-[ -n "$lang" ] && [ -n "$name" ] || { echo "usage: stream.sh LANG NAME [ENTRY [FORM]]" >&2; exit 2; }
-entry="${3:-$share/langs/$lang/run.x}"; form="${4:-}"
-[ -f "$entry" ] || { echo "stream: no entry at $entry" >&2; exit 1; }
+# Report an error and exit with a status: fail STATUS MESSAGE
+fail() {
+	status="$1"
+	shift
+	echo "stream: $*" >&2
+	exit "$status"
+}
+
+lang="$1"
+name="$2"
+if [ -z "$lang" ] || [ -z "$name" ]; then
+	fail 2 "usage: stream.sh LANG NAME [ENTRY [FORM]]"
+fi
+entry="${3:-$share/langs/$lang/run.x}"
+form="${4:-}"
+if [ ! -f "$entry" ]; then
+	fail 1 "no entry at $entry"
+fi
 image="$share/langs/$lang/.images/$lang.boot.x.ximg"
-[ -f "$image" ] || { echo "stream: no state image at $image" >&2; exit 1; }
+if [ ! -f "$image" ]; then
+	fail 1 "no state image at $image"
+fi
 
 mkdir -p "$share/launch"
 {
 	printf '(def %%IMG-PATH "%s")\n' "$image"
 	loader
 	printf '(set! %%batch? ())\n'
-	[ -z "$form" ] || printf '%s\n' "$form"
+	if [ -n "$form" ]; then
+		printf '%s\n' "$form"
+	fi
 	cat "$entry"
 	cat "$share/lib/x/repl/launch.x"
 } > "$share/launch/$name"

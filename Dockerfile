@@ -30,68 +30,24 @@ RUN rm -f engine/x-engine-build.xon \
 # Out of the checkout: with lib/x.x in the working directory the wrapper runs
 # in repo mode and does not see the installed langs.
 WORKDIR /src
+COPY tools /src/tools
 COPY build/src /src/all
-# Every source but the platform is a lang.  All are installed before any is
-# imaged, since a lang may require another.  One that writes no image boots
-# from source, which the image has no wrapper to do, so that is an error.
-RUN for d in /src/all/*/; do \
-      [ -f "$d/lang.xon" ] || continue; \
-      make -C "$d" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$d/.commit")" || exit 1; \
-    done
-RUN for d in /src/all/*/; do \
-      [ -f "$d/lang.xon" ] || continue; \
-      lang=$(sed -n 's/^(lang "\(.*\)").*/\1/p' "$d/lang.xon"); \
-      x --image -l "$lang" || exit 1; \
-      [ -f "/usr/share/x/langs/$lang/.images/$lang.boot.x.ximg" ] \
-        || { echo "no state image for $lang" >&2; exit 1; }; \
-    done
+RUN sh /src/tools/build.sh install-langs /src/all
+RUN sh /src/tools/build.sh image-langs /src/all
 
-# The dialects the x command offers, imaged where it looks for them.  The
-# wrapper writes a dialect's image to its cache, named for the tree.
+# The dialects the x command offers.
 ARG DIALECTS="x xe"
-RUN mkdir -p /usr/share/x/images \
- && for d in $DIALECTS; do \
-      XDG_CACHE_HOME=/tmp/dialect-images x --image -l "$d" || exit 1; \
-      cp /tmp/dialect-images/x/images/*/"$d.boot.x.ximg" /usr/share/x/images/ || exit 1; \
-    done \
- && rm -rf /tmp/dialect-images
+RUN sh /src/tools/build.sh image-dialects $DIALECTS
 
-COPY tools/stream.sh /src/stream.sh
 COPY init /src/init
 COPY commands.xon /src/commands.xon
-RUN sh /src/stream.sh --loader \
- && sh /src/stream.sh coreutils coreutils \
- && sed -n 's/^(command[[:space:]]\{1,\}\([a-z0-9-]*\)[[:space:]]\{1,\}\([a-z0-9-]*\)).*/\1 \2/p' \
-      /src/commands.xon > /src/commands \
- && [ "$(grep -c '^(command' /src/commands.xon)" = "$(grep -c . /src/commands)" ] \
- && while read -r name lang; do sh /src/stream.sh "$lang" "$name" || exit 1; done < /src/commands \
- && sh /src/stream.sh ash init /src/init/init.x \
- && for how in poweroff reboot halt; do \
-      sh /src/stream.sh ash "$how" /src/init/power.x "(def %power-how (lit $how))" || exit 1; \
-    done
+RUN sh /src/tools/build.sh streams /src/commands.xon /src/init
 
-COPY etc /src/etc
 COPY launch /src/launch
 RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/x.c
 
-# The root: the loader, the engine, the library, the langs, and links.
-RUN mkdir -p /rootfs/lib /rootfs/bin /rootfs/usr/libexec /rootfs/usr/share \
-      /rootfs/tmp /rootfs/root /rootfs/proc /rootfs/sys /rootfs/dev /rootfs/etc \
- && chmod 1777 /rootfs/tmp \
- && cp /lib/ld-musl-*.so.1 /rootfs/lib/ \
- && cp -R /usr/libexec/x /rootfs/usr/libexec/x \
- && cp -R /usr/share/x /rootfs/usr/share/x \
- && rm -rf /rootfs/usr/share/x/tests \
- && mkdir -p /rootfs/run \
- && ln -s /usr/libexec/x/launch /rootfs/init \
- && ln -s /usr/libexec/x/launch /rootfs/bin/x \
- && while read -r name lang; do ln -s /usr/libexec/x/launch "/rootfs/bin/$name" || exit 1; done < /src/commands \
- && for how in poweroff reboot halt; do ln -s /usr/libexec/x/launch "/rootfs/bin/$how"; done \
- && sh /src/stream.sh --applets > /tmp/applets \
- && while read -r a; do [ -e "/rootfs/bin/$a" ] || ln -s /usr/libexec/x/launch "/rootfs/bin/$a"; done < /tmp/applets \
- && printf 'root:x:0:0:root:/root:/bin/sh\n' > /rootfs/etc/passwd \
- && printf 'root:x:0:\ndaemon:x:1:\n' > /rootfs/etc/group \
- && cp /src/etc/hello.c /rootfs/etc/hello.c
+COPY etc /src/etc
+RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
 
 FROM scratch AS root
 COPY --from=build /rootfs /
@@ -108,7 +64,8 @@ COPY --from=build /rootfs /rootfs
 RUN mknod -m 600 /rootfs/dev/console c 5 1 \
  && mkdir /out \
  && cp /boot/vmlinuz-virt /out/vmlinuz \
- && cd /rootfs && find . | cpio -o -H newc | gzip -9 > /out/initramfs.cpio.gz
+ && cd /rootfs \
+ && find . | cpio -o -H newc | gzip -9 > /out/initramfs.cpio.gz
 
 FROM scratch AS boot
 COPY --from=initramfs /out /
