@@ -35,20 +35,33 @@ jobs:
       BRANCH: pins/update
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      # An open update is built on: what was pushed to its branch since, a
+      # test beside the pins it needs, stays.  A branch main has left behind
+      # is started again from main.
+      - name: Start from the open update
+        run: |
+          if git ls-remote --exit-code --heads origin "$BRANCH" > /dev/null \
+             && git merge-base --is-ancestor origin/main "origin/$BRANCH"; then
+            git checkout -B "$BRANCH" "origin/$BRANCH"
+          else
+            git checkout -B "$BRANCH"
+          fi
       - name: Look for newer commits
         id: look
         run: |
           sh tools/pins-update.sh > moved.txt
           cat moved.txt
           if [ -s moved.txt ]; then echo "moved=1" >> "$GITHUB_OUTPUT"; fi
-      # One branch, rewritten each time: an open pull request is brought up to
-      # date, and a second one is never opened beside it.
+      # One branch: an open pull request is brought up to date, and a second
+      # one is never opened beside it.  Forced, for the case where the branch
+      # was started again from main.
       - name: Push the branch
         if: steps.look.outputs.moved == '1'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git checkout -B "$BRANCH"
           git add pins.xon
           git commit -m "chore(pins): move to the newest tracked commits" \
             -m "$(awk '{ printf "%s: %.12s -> %.12s (%s)\n", $1, $2, $3, $4 }' moved.txt)"
@@ -56,12 +69,23 @@ jobs:
       - name: Open or update the pull request
         if: steps.look.outputs.moved == '1'
         run: |
+          # The table is the branch against main, not this run's moves alone:
+          # the branch may hold moves an earlier run made.
+          git show origin/main:pins.xon > base.xon
           {
             echo "## Moved pins"
             echo
             echo "| Source | From | To | Found at |"
             echo "|---|---|---|---|"
-            awk '{ printf "| %s | %.12s | %.12s | %s |\n", $1, $2, $3, $4 }' moved.txt
+            awk '
+              /^\(source/ {
+                name = $2; commit = $4; gsub(/[")]/, "", commit)
+                where = $NF
+                if (FNR == NR) { base[name] = commit; next }
+                if (base[name] != commit)
+                  printf "| %s | %.12s | %.12s | %s |\n", name,
+                    (name in base) ? base[name] : "none", commit, where
+              }' base.xon pins.xon
             echo
             echo "The CI run on this branch builds and boots the image from these commits."
           } > body.md

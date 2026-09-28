@@ -19,6 +19,8 @@ out=$(printf '%s\n' \
 	'ls -l /usr/libexec/x' \
 	'grep -n daemon /etc/group' \
 	'sed -e s/root/ROOT/ /etc/group' \
+	'cat /etc/group | grep -c x' \
+	'cat /etc/group | sed -e s/daemon/PIPED/' \
 	"awk -F: '{ print \"awk-\" \$1 }' /etc/group" \
 	'cat /etc/hello.c' \
 	'cc run /etc/hello.c' \
@@ -32,7 +34,7 @@ out=$(printf '%s\n' \
 fail=0
 for want in '^shell-ok$' '^\(x86_64\|aarch64\)$' '^3$' '^root:x:0:0:' \
 	'^-rwxr-xr-x .* x-bin$' '^2:daemon:x:1:$' '^ROOT:x:0:$' '^awk-daemon$' \
-	'^hello from C, 42$'; do
+	'^hello from C, 42$' '^2$' '^PIPED:x:1:$'; do
 	printf '%s\n' "$out" | grep -q -e "$want" || {
 		echo "container-test: nothing matching $want" >&2
 		fail=1
