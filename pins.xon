@@ -11,9 +11,9 @@
 ; Both tools read this file as text, a row a line.
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "9e0b1d04b5efcac2eaa87d97a7f7cb58e322bed5") ; v0.16.0
-(source x-ash       "https://github.com/jonruttan/x-ash.git"       "dc030ad2dc229c0abd4c21e82d486ad4a90333ce") ; main
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "2d86556cea4274a42b8203bf6ea998c3d447594e") ; main
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "750cc7e037995f5b5206a8cdec30c23b7d7d54bb") ; main
-(source x-grep      "https://github.com/jonruttan/x-grep.git" "7d178fe29039c177006fd66f91ad12f0064f6a72") ; main
+(source x-grep      "https://github.com/jonruttan/x-grep.git" "349e86ab1b259a13d7049e5e8a58a1070434d850") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "5aa59bef509a19511d5c6ccd70e5e2f3c8334842") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "31772307f46bf7e5a56134dc806f1fc35b72b86b") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "53f4076b6dc0ca596bad51297f944e70d03ffb7b") ; main
