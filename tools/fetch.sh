@@ -14,7 +14,7 @@ OUT="${OUT:-build/src}"
 [ -f "$PINS" ] || { echo "fetch: no pins at $PINS" >&2; exit 2; }
 
 # The closed vocabulary: a form this reader does not know is an error.
-bad=$(sed -n 's/^(\([a-z-]*\)[ )].*/\1/p' "$PINS" | sort -u | grep -vx 'source' || true)
+bad=$(sed -n 's/^(\([a-z-]*\)[ )].*/\1/p' "$PINS" | sort -u | grep -vxE 'source|track' || true)
 [ -z "$bad" ] || { echo "fetch: unknown form(s) in $PINS: $bad" >&2; exit 2; }
 
 rows=$(sed -n 's/^(source[[:space:]]\{1,\}\([a-z0-9-]*\)[[:space:]]\{1,\}"\([^"]*\)"[[:space:]]\{1,\}"\([0-9a-f]\{40\}\)").*/\1 \2 \3/p' "$PINS")

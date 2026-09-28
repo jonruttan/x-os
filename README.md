@@ -66,6 +66,11 @@ the image.
 `pins.xon` names each source by commit. `make fetch` acquires them into
 `build/src` and refuses a checkout whose commit is not the one named.
 
+It also says what each source tracks: its highest version tag, or the head of
+its main branch. `tools/pins-update.sh` moves the pins to the newest tracked
+commits, and the Pins workflow runs it daily and opens a pull request with
+what moved. The image is rebuilt and published when that is merged.
+
 ## Limits
 
 - x-coreutils reads file metadata through system calls made by number, which

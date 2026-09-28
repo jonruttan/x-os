@@ -1,0 +1,77 @@
+name: Pins
+
+# Once a day, and on request: look for a newer commit of each source pins.xon
+# tracks, and open a pull request that moves the pins.  The image is rebuilt
+# when that pull request is merged; nothing is published from here.
+#
+# A pull request opened with the workflow's own token does not start the CI
+# workflow, so this one starts it, on the branch it pushed.  The run shows on
+# the pull request because a check belongs to a commit.
+#
+# The repository has to allow Actions to open pull requests: Settings, Actions,
+# General, "Allow GitHub Actions to create and approve pull requests".
+
+on:
+  schedule:
+    - cron: "17 6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  actions: write
+
+concurrency:
+  group: pins
+  cancel-in-progress: false
+
+jobs:
+  update:
+    name: update
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: pins/update
+    steps:
+      - uses: actions/checkout@v7
+      - name: Look for newer commits
+        id: look
+        run: |
+          sh tools/pins-update.sh > moved.txt
+          cat moved.txt
+          if [ -s moved.txt ]; then echo "moved=1" >> "$GITHUB_OUTPUT"; fi
+      # One branch, rewritten each time: an open pull request is brought up to
+      # date, and a second one is never opened beside it.
+      - name: Push the branch
+        if: steps.look.outputs.moved == '1'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add pins.xon
+          git commit -m "chore(pins): move to the newest tracked commits" \
+            -m "$(awk '{ printf "%s: %.12s -> %.12s (%s)\n", $1, $2, $3, $4 }' moved.txt)"
+          git push --force origin "$BRANCH"
+      - name: Open or update the pull request
+        if: steps.look.outputs.moved == '1'
+        run: |
+          {
+            echo "## Moved pins"
+            echo
+            echo "| Source | From | To | Found at |"
+            echo "|---|---|---|---|"
+            awk '{ printf "| %s | %.12s | %.12s | %s |\n", $1, $2, $3, $4 }' moved.txt
+            echo
+            echo "The CI run on this branch builds and boots the image from these commits."
+          } > body.md
+          if gh pr view "$BRANCH" --json state --jq .state 2>/dev/null | grep -qx OPEN; then
+            gh pr edit "$BRANCH" --body-file body.md
+          else
+            gh pr create --base main --head "$BRANCH" \
+              --title "chore(pins): move to the newest tracked commits" \
+              --body-file body.md
+          fi
+      - name: Start CI on the branch
+        if: steps.look.outputs.moved == '1'
+        run: gh workflow run ci.yml --ref "$BRANCH"
