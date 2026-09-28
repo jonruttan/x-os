@@ -94,22 +94,26 @@ write_streams() {
 	done
 }
 
-# Link a command to the launcher: link_command ROOT NAME
+# Link a command to the launcher, among the commands: link_command ROOT NAME
 link_command() {
-	ln -s "$launcher" "$1/bin/$2"
+	ln -s "$launcher" "$1/usr/bin/$2"
 }
 
 # The root: the loader, the engine, the library, the langs, and the links.
+# The commands are in /usr/bin, and /bin is a link to it: the state images
+# record the library as /usr/bin/../share/x, where the wrapper that wrote
+# them stood, and that path resolves only through a real /usr/bin.
 # Each applet gets a link unless a command of its own has the name.
 assemble_root() {
 	root="$1"
 	commands_file="$2"
 	etc_dir="$3"
 
-	mkdir -p "$root/lib" "$root/bin" "$root/usr/libexec" "$root/usr/share" \
+	mkdir -p "$root/lib" "$root/usr/bin" "$root/usr/libexec" "$root/usr/share" \
 		"$root/tmp" "$root/root" "$root/proc" "$root/sys" "$root/dev" \
 		"$root/etc" "$root/run"
 	chmod 1777 "$root/tmp"
+	ln -s usr/bin "$root/bin"
 	cp /lib/ld-musl-*.so.1 "$root/lib/"
 	cp -R /usr/libexec/x "$root/usr/libexec/x"
 	cp -R "$share" "$root/usr/share/x"
@@ -124,7 +128,7 @@ assemble_root() {
 		link_command "$root" "$how"
 	done
 	sh "$here/stream.sh" --applets | while read -r applet; do
-		if [ ! -e "$root/bin/$applet" ]; then
+		if [ ! -e "$root/usr/bin/$applet" ]; then
 			link_command "$root" "$applet"
 		fi
 	done

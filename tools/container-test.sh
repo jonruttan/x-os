@@ -70,6 +70,12 @@ done <<EOF
 $expected
 EOF
 
+# What no command may print: a lang that cannot find part of its library.
+if printf '%s\n' "$out" | grep -q -e 'unreadable'; then
+	echo "container-test: a lang could not read part of its library" >&2
+	failed=1
+fi
+
 if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
