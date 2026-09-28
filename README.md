@@ -56,7 +56,8 @@ make test
 ```
 
 `make help` lists the targets. `ARCH` is `amd64` or `arm64` and defaults to
-the host's. The build needs Docker, and the boot test needs QEMU.
+the host's. The build needs Docker, the container test needs `expect`, and
+the boot test needs QEMU.
 
 The builder is Alpine with a C compiler, a shell and make. None of it reaches
 the image.

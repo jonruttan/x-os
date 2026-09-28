@@ -34,11 +34,11 @@ jobs:
             os: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v7
-      - name: Install QEMU
+      - name: Install QEMU and expect
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            qemu-system-x86 qemu-system-arm
+            qemu-system-x86 qemu-system-arm expect
       # The runner's own virtualization, where it has any: the boot test uses
       # /dev/kvm when it can write to it and emulates when it cannot.
       - name: Allow KVM

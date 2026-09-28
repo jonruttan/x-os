@@ -13,11 +13,19 @@ WORKDIR /src
 COPY build/src/x-lang /src/x-lang
 WORKDIR /src/x-lang
 # A fetched source has no history to describe itself from, so each is stamped
-# with the commit it was pinned at.
+# with the commit it was pinned at, at install.  The engine is a clone and
+# describes itself.
 RUN make engine-source
-RUN make X_RELEASE="$(cut -c1-12 .commit)"
-RUN make boot X_RELEASE="$(cut -c1-12 .commit)"
+RUN make
+RUN make boot
 RUN make install PREFIX=/usr X_RELEASE="$(cut -c1-12 .commit)"
+# A variable given to make reaches every make under it, so install has
+# restamped the engine's declaration with x-lang's commit.  The engine writes
+# its own again, and that is the one installed.
+RUN rm -f engine/x-engine-build.xon \
+ && make -C engine x-engine-build.xon \
+ && grep '^(param release "v' engine/x-engine-build.xon \
+ && install -m 0644 engine/x-engine-build.xon /usr/libexec/x/x-engine-build.xon
 
 # Out of the checkout: with lib/x.x in the working directory the wrapper runs
 # in repo mode and does not see the installed langs.

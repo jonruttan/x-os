@@ -28,6 +28,7 @@ boot: fetch ## Build the kernel and the initramfs into build/boot-ARCH
 .PHONY: test-container
 test-container: container ## Run the shell in the container
 	sh tools/container-test.sh $(IMAGE):$(ARCH) $(PLATFORM)
+	expect tools/terminal-test.exp $(IMAGE):$(ARCH) $(PLATFORM)
 
 .PHONY: test-boot
 test-boot: boot ## Boot the image under QEMU
