@@ -74,8 +74,6 @@ what moved. The image is rebuilt and published when that is merged.
 
 ## Limits
 
-- x-coreutils reads file metadata through system calls made by number, which
-  on arm64 Linux name other calls. `ls` fails there.
 - A language that boots from source needs about 4 GB. The image boots each
   lang from its state image.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
