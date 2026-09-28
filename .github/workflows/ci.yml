@@ -1,0 +1,109 @@
+name: CI
+
+# A pull request builds the container and the bootable image for both
+# architectures and tests each: the shell in the container, and a boot under
+# QEMU that ends with the guest powering itself down.  A push to main does the
+# same and then publishes the container.
+#
+# Each architecture builds on a runner of its own kind, so nothing is built
+# under emulation.  The publish job is the exception: one build for both
+# platforms, so that one tag names both.
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: test (${{ matrix.arch }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 45
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: amd64
+            os: ubuntu-24.04
+          - arch: arm64
+            os: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v7
+      - name: Install QEMU and expect
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qemu-system-x86 qemu-system-arm expect
+      # The runner's own virtualization, where it has any: the boot test uses
+      # /dev/kvm when it can write to it and emulates when it cannot.
+      - name: Allow KVM
+        run: |
+          if [ -e /dev/kvm ]; then
+            echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' \
+              | sudo tee /etc/udev/rules.d/99-kvm.rules
+            sudo udevadm control --reload-rules
+            sudo udevadm trigger --name-match=kvm
+          fi
+      - name: Container
+        run: make test-container ARCH=${{ matrix.arch }}
+      - name: Boot
+        run: make test-boot ARCH=${{ matrix.arch }}
+        env:
+          BOOT_MEM: "3072"
+      - name: Keep the bootable image
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-os-boot-${{ matrix.arch }}
+          path: build/boot-${{ matrix.arch }}
+          if-no-files-found: error
+
+  publish:
+    name: publish
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      # A repository without the two secrets builds and tests and publishes
+      # nothing, and says so.
+      - name: Are there credentials
+        id: creds
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
+            echo "have=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "No DOCKERHUB_USERNAME and DOCKERHUB_TOKEN: nothing is published."
+          fi
+      - uses: actions/checkout@v7
+        if: steps.creds.outputs.have == '1'
+      - name: Fetch the pinned sources
+        if: steps.creds.outputs.have == '1'
+        run: make fetch
+      - uses: docker/setup-qemu-action@v3
+        if: steps.creds.outputs.have == '1'
+      - uses: docker/setup-buildx-action@v3
+        if: steps.creds.outputs.have == '1'
+      - uses: docker/login-action@v3
+        if: steps.creds.outputs.have == '1'
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - name: Build and push
+        if: steps.creds.outputs.have == '1'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: root
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ secrets.DOCKERHUB_USERNAME }}/x-os:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/x-os:${{ github.sha }}

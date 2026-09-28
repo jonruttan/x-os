@@ -1,0 +1,47 @@
+#!/usr/bin/expect -f
+# terminal-test.exp -- use the container's shell at a terminal, as a person
+# would: wait for the prompt's banner, type, read the answer.
+#
+#   expect tools/terminal-test.exp IMAGE PLATFORM
+#
+# container-test.sh pipes a script in and never meets the line editor; this
+# does.
+
+set timeout 120
+set image [lindex $argv 0]
+set platform [lindex $argv 1]
+if {$image eq "" || $platform eq ""} {
+	puts stderr "usage: terminal-test.exp IMAGE PLATFORM"
+	exit 2
+}
+
+proc fail {what} {
+	puts stderr "\nterminal-test: $what"
+	exit 1
+}
+
+spawn docker run --rm -it --platform $platform --memory 3g --pids-limit 256 $image
+
+expect {
+	"exit or ctrl-d to leave" {}
+	timeout { fail "no banner" }
+	eof { fail "the container ended before its banner" }
+}
+send "echo typed-\$((6*7))\r"
+expect {
+	"typed-42" {}
+	timeout { fail "no answer to echo" }
+	eof { fail "the shell ended at echo" }
+}
+send "uname -m\r"
+expect {
+	-re {x86_64|aarch64} {}
+	timeout { fail "no answer to uname" }
+	eof { fail "the shell ended at uname" }
+}
+send "exit\r"
+expect {
+	eof {}
+	timeout { fail "the shell did not leave at exit" }
+}
+puts "\nterminal-test: $platform answered at a terminal"

@@ -1,0 +1,19 @@
+; pins.xon -- what the image is built from.
+;
+; (source NAME URL COMMIT) is a pin: the commit is the whole of it, and
+; tools/fetch.sh refuses a checkout whose commit is not the one named.  The
+; comment after a row says where the commit was found and decides nothing.
+;
+; (track NAME WHAT) says where tools/pins-update.sh looks for a newer commit:
+; `release` is the highest version tag, `main` the head of the main branch.
+; Tracking moves nothing by itself; a moved pin arrives as a pull request.
+;
+; Both tools read this file as text, a row a line.
+
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "9e0b1d04b5efcac2eaa87d97a7f7cb58e322bed5") ; v0.16.0
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "a82c0e2dee8a3f6a40d4b6df7cb652a6acf067e2") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "041afb60467b65fab7a19e078e9e7426d79bea28") ; main
+
+(track x-lang      release)
+(track x-ash       main)
+(track x-coreutils main)
