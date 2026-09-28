@@ -39,6 +39,8 @@ the `x` command, and the engine.
 | `sed` | [x-sed](https://github.com/jonruttan/x-sed) |
 | `awk` | [x-awk](https://github.com/jonruttan/x-awk) |
 | `cc` | [x-cc](https://github.com/jonruttan/x-cc) |
+| `python` | [x-python](https://github.com/jonruttan/x-python) |
+| `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
 | every other | an x-coreutils applet |
@@ -114,6 +116,8 @@ what moved. The image is rebuilt and published when that is merged.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
 - The shell takes no arguments: `sh -c COMMAND` and `sh FILE` run nothing.
   x-make is left out for that reason, since a recipe is run by `sh -c`.
-- x-python is left out: it writes no state image on x-lang v0.16.0.
+- Writing x-python's state image needs more than 4 GB, so the build does too.
+- `logo` does not read a piped program: a program goes in a file,
+  `x -l logo -f FILE`.
 - `cc` is x-cc, whose `run` executes a C program. It writes no executable
   here: what it writes is Mach-O.
