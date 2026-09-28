@@ -39,6 +39,25 @@ expect {
 	timeout { fail "no answer to uname" }
 	eof { fail "the shell ended at uname" }
 }
+send "x\r"
+expect {
+	"ctrl-d to exit" {}
+	timeout { fail "x started no session" }
+	eof { fail "the shell ended at x" }
+}
+send "(write (+ 40 2))\r"
+expect {
+	"42" {}
+	timeout { fail "no answer from x's session" }
+	eof { fail "the shell ended in x's session" }
+}
+send "\004"
+send "echo back-from-x\r"
+expect {
+	"back-from-x" {}
+	timeout { fail "the shell did not answer after x's session" }
+	eof { fail "the shell ended after x's session" }
+}
 send "exit\r"
 expect {
 	eof {}

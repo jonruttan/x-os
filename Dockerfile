@@ -46,10 +46,21 @@ RUN for d in /src/all/*/; do \
         || { echo "no state image for $lang" >&2; exit 1; }; \
     done
 
+# The dialects the x command offers, imaged where it looks for them.  The
+# wrapper writes a dialect's image to its cache, named for the tree.
+ARG DIALECTS="x xe"
+RUN mkdir -p /usr/share/x/images \
+ && for d in $DIALECTS; do \
+      XDG_CACHE_HOME=/tmp/dialect-images x --image -l "$d" || exit 1; \
+      cp /tmp/dialect-images/x/images/*/"$d.boot.x.ximg" /usr/share/x/images/ || exit 1; \
+    done \
+ && rm -rf /tmp/dialect-images
+
 COPY tools/stream.sh /src/stream.sh
 COPY init /src/init
 COPY commands.xon /src/commands.xon
-RUN sh /src/stream.sh coreutils coreutils \
+RUN sh /src/stream.sh --loader \
+ && sh /src/stream.sh coreutils coreutils \
  && sed -n 's/^(command[[:space:]]\{1,\}\([a-z0-9-]*\)[[:space:]]\{1,\}\([a-z0-9-]*\)).*/\1 \2/p' \
       /src/commands.xon > /src/commands \
  && [ "$(grep -c '^(command' /src/commands.xon)" = "$(grep -c . /src/commands)" ] \
@@ -61,7 +72,7 @@ RUN sh /src/stream.sh coreutils coreutils \
 
 COPY etc /src/etc
 COPY launch /src/launch
-RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c
+RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/x.c
 
 # The root: the loader, the engine, the library, the langs, and links.
 RUN mkdir -p /rootfs/lib /rootfs/bin /rootfs/usr/libexec /rootfs/usr/share \
@@ -73,6 +84,7 @@ RUN mkdir -p /rootfs/lib /rootfs/bin /rootfs/usr/libexec /rootfs/usr/share \
  && rm -rf /rootfs/usr/share/x/tests \
  && mkdir -p /rootfs/run \
  && ln -s /usr/libexec/x/launch /rootfs/init \
+ && ln -s /usr/libexec/x/launch /rootfs/bin/x \
  && while read -r name lang; do ln -s /usr/libexec/x/launch "/rootfs/bin/$name" || exit 1; done < /src/commands \
  && for how in poweroff reboot halt; do ln -s /usr/libexec/x/launch "/rootfs/bin/$how"; done \
  && sh /src/stream.sh --applets > /tmp/applets \

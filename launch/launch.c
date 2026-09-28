@@ -8,6 +8,7 @@
  *
  * The command name picks the stream: LAUNCH_DIR/NAME when there is one,
  * and otherwise the applet stream, with NAME passed as the first argument.
+ * The name x is the x command, which writes its stream as it goes (x.c).
  */
 #include <fcntl.h>
 #include <string.h>
@@ -34,6 +35,8 @@ static void fail(const char *what, const char *arg)
 	_exit(127);
 }
 
+int x_main(int argc, char *argv[]);
+
 int main(int argc, char *argv[])
 {
 	static char path[PATH_LEN];
@@ -47,6 +50,8 @@ int main(int argc, char *argv[])
 	/* A login shell arrives as "-sh". */
 	if (*name == '-')
 		name++;
+	if (strcmp(name, "x") == 0)
+		return x_main(argc, argv);
 	if (strlen(LAUNCH_DIR) + strlen(name) >= PATH_LEN || argc + 4 > ARGS_MAX)
 		fail("name or argument list too long: ", name);
 

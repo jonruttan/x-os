@@ -27,7 +27,8 @@ aarch64
 The container is that root. The bootable image is the same root as an
 initramfs, beside a kernel; the kernel is Alpine's `linux-virt`.
 
-There is no shell but x-ash and no C program but the launcher and the engine.
+There is no shell but x-ash and no C program but the launcher, which is also
+the `x` command, and the engine.
 
 ## Commands
 
@@ -38,6 +39,7 @@ There is no shell but x-ash and no C program but the launcher and the engine.
 | `sed` | [x-sed](https://github.com/jonruttan/x-sed) |
 | `awk` | [x-awk](https://github.com/jonruttan/x-awk) |
 | `cc` | [x-cc](https://github.com/jonruttan/x-cc) |
+| `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
 | every other | an x-coreutils applet |
 
@@ -53,6 +55,25 @@ stream, with the name passed as the applet.
 
 A boot stream is the text the `x` wrapper pipes for a lang booted from its
 state image. `tools/stream.sh` writes it when the image is built.
+
+## The x command
+
+```
+x                                   a session in helium
+x -l xe                             a session in xenon
+x -c '(write (+ 1 2))'              evaluate, then exit; -c repeats
+x -f prog.x                         evaluate a file, then exit
+x -F lib.x                          evaluate a file, then the session
+echo '(write 42)' | x               piped stdin is the program
+x -l awk -- 'BEGIN { print 6*7 }'   a lang, with its arguments after --
+```
+
+`x` writes the stream the wrapper script writes for a boot from a state
+image, from the same pieces and by the same rules, and runs the engine on it.
+It takes `-l`, `-c`, `-f`, `-F`, `-q`, `--no-color`, `--share-dir`,
+`--engine-path` and `-v`, which prints the pieces. The dialects are the ones
+imaged into `/usr/share/x/images`: `x` and `xe`. The langs are the installed
+ones. Each boots from its state image, and there is no source boot.
 
 ## Process 1
 
