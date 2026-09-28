@@ -33,7 +33,10 @@ script() {
 		"x -q -c '(display \"x-says-\") (write (+ 100 23)) (newline)'" \
 		"x -q -l xe -c '(display \"xe-says-\") (write (+ 1/3 1/6)) (newline)'" \
 		"echo '(display \"x-piped-\") (write 42) (newline)' | x -q" \
-		"x -q -l awk -- 'BEGIN { print \"x-awk-\" 6*7 }'"
+		"x -q -l awk -- 'BEGIN { print \"x-awk-\" 6*7 }'" \
+		"echo 'print 19*53' > /tmp/seven.logo" \
+		'x -q -l logo -f /tmp/seven.logo' \
+		"echo 'print(\"python-says-\" + str(2 ** 100))' | python"
 }
 
 # A line of the output each must match, in any order.
@@ -51,7 +54,9 @@ expected='^shell-ok$
 ^x-says-123$
 ^xe-says-1/2$
 ^x-piped-42$
-^x-awk-42$'
+^x-awk-42$
+^1007$
+^python-says-1267650600228229401496703205376$'
 
 if ! out=$(script | docker run --rm -i --platform "$platform" \
 	--memory "${TEST_MEM:-3g}" --pids-limit 256 "$image" 2>&1); then
@@ -80,4 +85,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc and x"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo and python"

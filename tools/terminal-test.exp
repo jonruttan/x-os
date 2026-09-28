@@ -24,6 +24,7 @@ if {$image eq "" || $platform eq ""} {
 # A prompt as the line editors draw it: the line cleared, then the prompt.
 set shell_prompt {\x1b\[K# }
 set x_prompt {\x1b\[K> }
+set logo_prompt {\n\? $}
 
 proc fail {what} {
 	puts stderr "\nterminal-test: $what"
@@ -72,6 +73,18 @@ send "\004"
 await $shell_prompt "shell prompt after x's session"
 send "echo back-from-x\r"
 await_line "back-from-x" "answer from the shell after x's session"
+
+await $shell_prompt "shell prompt before logo"
+send "logo\r"
+await $logo_prompt "prompt from logo"
+send "print 19*53\r"
+await_line "1007" "answer from logo"
+
+await $logo_prompt "prompt from logo after its answer"
+send "\004"
+await $shell_prompt "shell prompt after logo's session"
+send "echo back-from-logo\r"
+await_line "back-from-logo" "answer from the shell after logo's session"
 
 await $shell_prompt "shell prompt before exit"
 send "exit\r"

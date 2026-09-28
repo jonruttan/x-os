@@ -17,6 +17,8 @@
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "5aa59bef509a19511d5c6ccd70e5e2f3c8334842") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "31772307f46bf7e5a56134dc806f1fc35b72b86b") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "e8ccd8b8ee4601992eb42f07b48105127c48442c") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "164450922f6087f8410766772c11b09f76b25eaf") ; main
+(source x-logo      "https://github.com/jonruttan/x-logo.git" "5977e08cbbb1f195b22fcc8b727cb818fb3bc0b7") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -25,3 +27,5 @@
 (track x-sed       main)
 (track x-awk       main)
 (track x-cc        main)
+(track x-python    main)
+(track x-logo      main)

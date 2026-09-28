@@ -13,3 +13,5 @@
 (command sed     sed)
 (command awk     awk)
 (command cc      cc)
+(command python  python)
+(command logo    logo)
