@@ -22,7 +22,7 @@ aarch64
 | `/usr/libexec/x/launch` | the launcher |
 | `/usr/share/x` | the library, the langs and their state images |
 | `/usr/share/x/launch` | one boot stream a command |
-| `/bin`, `/init` | links to the launcher |
+| `/usr/bin`, `/init` | links to the launcher; `/bin` is a link to `/usr/bin` |
 
 The container is that root. The bootable image is the same root as an
 initramfs, beside a kernel; the kernel is Alpine's `linux-virt`.

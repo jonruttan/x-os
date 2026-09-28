@@ -51,7 +51,7 @@ RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
 
 FROM scratch AS root
 COPY --from=build /rootfs /
-ENV PATH=/bin HOME=/root
+ENV PATH=/usr/bin:/bin HOME=/root
 WORKDIR /root
 CMD ["/bin/sh"]
 
