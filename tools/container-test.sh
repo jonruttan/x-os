@@ -59,7 +59,8 @@ expected='^shell-ok$
 ^\(>>> \)\{0,1\}python-says-1267650600228229401496703205376$'
 
 if ! out=$(script | docker run --rm -i --platform "$platform" \
-	--memory "${TEST_MEM:-3g}" --pids-limit 256 "$image" 2>&1); then
+	--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
+	--pids-limit 256 "$image" 2>&1); then
 	echo "container-test: the container failed" >&2
 	printf '%s\n' "$out" >&2
 	exit 1
