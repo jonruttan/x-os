@@ -16,6 +16,7 @@ out=$(printf '%s\n' \
 	'uname -m' \
 	'echo one two three | wc -w' \
 	'cat /etc/passwd' \
+	'ls -l /usr/libexec/x' \
 	| docker run --rm -i --platform "$platform" \
 		--memory "${TEST_MEM:-3g}" --pids-limit 256 "$image" 2>&1) || {
 	echo "container-test: the container failed" >&2
@@ -24,11 +25,12 @@ out=$(printf '%s\n' \
 }
 
 fail=0
-for want in '^shell-ok$' '^\(x86_64\|aarch64\)$' '^3$' '^root:x:0:0:'; do
+for want in '^shell-ok$' '^\(x86_64\|aarch64\)$' '^3$' '^root:x:0:0:' \
+	'^-rwxr-xr-x .* x-bin$'; do
 	printf '%s\n' "$out" | grep -q -e "$want" || {
 		echo "container-test: nothing matching $want" >&2
 		fail=1
 	}
 done
 [ "$fail" -eq 0 ] || { printf '%s\n' "--- output" "$out" >&2; exit 1; }
-echo "container-test: $platform ran the shell, an applet, a pipeline and cat"
+echo "container-test: $platform ran the shell, an applet, a pipeline, cat and ls -l"
