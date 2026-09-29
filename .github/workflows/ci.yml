@@ -1,13 +1,14 @@
 name: CI
 
 # A pull request builds the container and the bootable image for both
-# architectures and tests each: the shell in the container, and a boot under
-# QEMU that ends with the guest powering itself down.  A push to main does the
-# same and then publishes the container.
+# architectures and tests each: the shell in the container, a boot of the
+# kernel and the initramfs under QEMU, and a boot of the ISO image, each
+# ending with the guest powering itself down.  A push to main does the same
+# and then publishes the container to Docker Hub and the ISO images as the
+# release named latest.
 #
 # Each architecture builds on a runner of its own kind, so nothing is built
-# under emulation.  The publish job is the exception: one build for both
-# platforms, so that one tag names both.
+# under emulation.
 
 on:
   push:
@@ -38,7 +39,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            qemu-system-x86 qemu-system-arm expect
+            qemu-system-x86 qemu-system-arm expect ovmf qemu-efi-aarch64
       # The runner's own virtualization, where it has any: the boot test uses
       # /dev/kvm when it can write to it and emulates when it cannot.
       - name: Allow KVM
@@ -55,6 +56,16 @@ jobs:
         run: make test-boot ARCH=${{ matrix.arch }}
         env:
           BOOT_MEM: "3072"
+      - name: ISO image
+        run: make test-iso ARCH=${{ matrix.arch }}
+        env:
+          BOOT_MEM: "3072"
+      - name: Keep the ISO image
+        uses: actions/upload-artifact@v4
+        with:
+          name: x-os-iso-${{ matrix.arch }}
+          path: build/iso-${{ matrix.arch }}/x-os-${{ matrix.arch }}.iso
+          if-no-files-found: error
       - name: Keep the bootable image
         uses: actions/upload-artifact@v4
         with:
@@ -173,3 +184,38 @@ jobs:
             -t "$image:latest" -t "$image:${{ github.sha }}" \
             $(printf "$image@sha256:%s " *)
           docker buildx imagetools inspect "$image:latest"
+
+  # The ISO images the test jobs built and booted, as the assets of one
+  # release whose tag moves to the commit they were built from.
+  release:
+    name: release
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      - name: Fetch the ISO images
+        uses: actions/download-artifact@v4
+        with:
+          path: iso
+          pattern: x-os-iso-*
+          merge-multiple: true
+      - name: Publish the release
+        working-directory: iso
+        run: |
+          if [ ! -s x-os-amd64.iso ] || [ ! -s x-os-arm64.iso ]; then
+            echo "expected two ISO images, have: $(ls)" >&2
+            exit 1
+          fi
+          sha256sum x-os-amd64.iso x-os-arm64.iso > SHA256SUMS
+          if gh release view latest > /dev/null 2>&1; then
+            gh release delete latest --yes --cleanup-tag
+          fi
+          gh release create latest --target "$GITHUB_SHA" --title "x-os" \
+            --notes "The bootable ISO images, built from $GITHUB_SHA." \
+            x-os-amd64.iso x-os-arm64.iso SHA256SUMS

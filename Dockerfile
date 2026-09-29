@@ -70,5 +70,19 @@ RUN mknod -m 600 /rootfs/dev/console c 5 1 \
 FROM scratch AS boot
 COPY --from=initramfs /out /
 
+# The bootable form as one file: the kernel and the initramfs on an ISO 9660
+# image that GRUB starts, from firmware of either kind where the
+# architecture has both.  GRUB is the one program aboard that is neither the
+# kernel nor x, and it is gone once the kernel runs.
+FROM alpine:3.20 AS iso-build
+RUN apk add --no-cache grub grub-efi xorriso mtools \
+ && if [ "$(uname -m)" = x86_64 ]; then apk add --no-cache grub-bios; fi
+COPY tools/iso.sh /src/tools/iso.sh
+COPY --from=initramfs /out /boot-files
+RUN sh /src/tools/iso.sh /boot-files /out
+
+FROM scratch AS iso
+COPY --from=iso-build /out /
+
 # The container image is the default target.
 FROM root
