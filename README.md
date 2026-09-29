@@ -13,6 +13,33 @@ exit or ctrl-d to leave
 aarch64
 ```
 
+## Getting it
+
+The container, for `linux/amd64` and `linux/arm64`, is on
+[Docker Hub](https://hub.docker.com/r/jonruttan/x-os):
+
+```bash
+docker run -it jonruttan/x-os
+```
+
+The bootable image is an ISO image, one an architecture, on the
+[latest release](https://github.com/jonruttan/x-os/releases/tag/latest):
+
+| Machine | Image | Started by |
+|---|---|---|
+| x86-64 | [x-os-amd64.iso](https://github.com/jonruttan/x-os/releases/download/latest/x-os-amd64.iso) | BIOS or UEFI |
+| arm64 | [x-os-arm64.iso](https://github.com/jonruttan/x-os/releases/download/latest/x-os-arm64.iso) | UEFI |
+
+It boots as a disc in a virtual machine. It needs
+4 GB of memory. Under QEMU:
+
+```bash
+qemu-system-x86_64 -m 4096 -cdrom x-os-amd64.iso
+```
+
+The menu's first entry puts the shell on the screen, and its second on the
+serial line.
+
 ## What is in it
 
 | Path | What |
@@ -25,10 +52,11 @@ aarch64
 | `/usr/bin`, `/init` | links to the launcher; `/bin` is a link to `/usr/bin` |
 
 The container is that root. The bootable image is the same root as an
-initramfs, beside a kernel; the kernel is Alpine's `linux-virt`.
+initramfs, beside a kernel; the kernel is Alpine's `linux-virt`. The ISO
+image holds the two and GRUB, which starts the kernel.
 
-There is no shell but x-ash and no C program but the launcher, which is also
-the `x` command, and the engine.
+Once the kernel runs there is no shell but x-ash and no C program but the
+launcher, which is also the `x` command, and the engine.
 
 ## Commands
 
@@ -98,7 +126,7 @@ make test
 
 `make help` lists the targets. `ARCH` is `amd64` or `arm64` and defaults to
 the host's. The build needs Docker, the container test needs `expect`, and
-the boot test needs QEMU.
+the boot tests need QEMU and, for the ISO image, its UEFI firmware.
 
 The builder is Alpine with a C compiler, a shell and make. None of it reaches
 the image.
