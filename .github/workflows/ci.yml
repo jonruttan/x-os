@@ -185,6 +185,35 @@ jobs:
             $(printf "$image@sha256:%s " *)
           docker buildx imagetools inspect "$image:latest"
 
+  # The repository on Docker Hub says what the image is.  A job of its own, so
+  # that a token not allowed to change a repository fails this and nothing
+  # else.
+  describe:
+    name: describe
+    needs: publish
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
+    steps:
+      - name: Are there credentials
+        id: creds
+        run: |
+          if [ -n "$DOCKERHUB_USERNAME" ] && [ -n "$DOCKERHUB_TOKEN" ]; then
+            echo "have=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "No DOCKERHUB_USERNAME and DOCKERHUB_TOKEN: nothing is described."
+          fi
+      - uses: actions/checkout@v7
+        if: steps.creds.outputs.have == '1'
+      - name: Describe the repository
+        if: steps.creds.outputs.have == '1'
+        run: |
+          sh tools/hub-describe.sh docs/docker-hub.md \
+            "The Linux kernel, x and its languages: x-ash as the shell, x-coreutils as its commands."
+
   # The ISO images the test jobs built and booted, as the assets of one
   # release whose tag moves to the commit they were built from.
   release:
