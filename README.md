@@ -109,6 +109,12 @@ It takes `-l`, `-c`, `-f`, `-F`, `-q`, `--no-color`, `--share-dir`,
 imaged into `/usr/share/x/images`: `x` and `xe`. The langs are the installed
 ones. Each boots from its state image, and there is no source boot.
 
+## Docker Hub
+
+`docs/docker-hub.md` is the overview the repository on Docker Hub shows.
+`tools/hub-describe.sh` sends it, and a push to main runs that after the
+image is published. The token must be allowed to read, write and delete.
+
 ## Process 1
 
 `init/init.x` mounts `/proc`, `/sys`, `/dev`, `/tmp` and `/run`, starts the
