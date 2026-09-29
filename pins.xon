@@ -16,7 +16,7 @@
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "1104c51532f6797c1c38640bf64cbb74bc1bc5bd") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "d84f92e52a2ae33c86218c3d9139099d743fd12d") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "f7a6c06e1547b0789ce32d8500763ecc8fc8e25c") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "c70ff66ecda14d42b5d88bcb4029d44b0373a206") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "8b88405f4b33f30c5848565512f4e11b1c201ee4") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "a485ee3330469b4dc13808c97f2bbc5e97a86e0f") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "2ca6c131ba50b75742ce931ddde9434ebe01035a") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "c0bdf889139e5fb3e1efdb91c630c08d370ec249") ; main
