@@ -25,6 +25,8 @@ if {$image eq "" || $platform eq ""} {
 set shell_prompt {\x1b\[K# }
 set x_prompt {\x1b\[K> }
 set logo_prompt {\n\? $}
+# An empty line of vi's screen: the cursor put at a row's start, then a tilde.
+set vi_empty_line {\x1b\[[0-9]+;1H~}
 
 proc fail {what} {
 	puts stderr "\nterminal-test: $what"
@@ -85,6 +87,20 @@ send "\004"
 await $shell_prompt "shell prompt after logo's session"
 send "echo back-from-logo\r"
 await_line "back-from-logo" "answer from the shell after logo's session"
+
+# vi: a line is put in, the file written, and the shell reads it back.  The
+# pause lets vi tell the escape key from the start of a key's sequence.
+await $shell_prompt "shell prompt before vi"
+send "vi /tmp/note.txt\r"
+await $vi_empty_line "screen from vi"
+send "iwritten-in-vi"
+await "written-in-vi" "the line in vi"
+send "\033"
+sleep 1
+send ":wq\r"
+await $shell_prompt "shell prompt after vi"
+send "cat /tmp/note.txt\r"
+await_line "written-in-vi" "the file vi wrote"
 
 await $shell_prompt "shell prompt before exit"
 send "exit\r"

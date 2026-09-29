@@ -11,13 +11,13 @@
 ; Both tools read this file as text, a row a line.
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "1beffe8185554ef7c6875d5d95f9cc09f40da8fe") ; v0.17.0
-(source x-ash       "https://github.com/jonruttan/x-ash.git"       "224547699c071eeddfa18448f7a2c59cfc3a18e0") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "4c3af96f39abc6ed5a2a05b05fe82bc0ab75e751") ; main
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "41a64fdf6b8f139ba73403752ad826d08643ccf5") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "1efaf275730429bac64c3eb617eb568503563e07") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "1104c51532f6797c1c38640bf64cbb74bc1bc5bd") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "d84f92e52a2ae33c86218c3d9139099d743fd12d") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "f7a6c06e1547b0789ce32d8500763ecc8fc8e25c") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "8b88405f4b33f30c5848565512f4e11b1c201ee4") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "a485ee3330469b4dc13808c97f2bbc5e97a86e0f") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "b705f88920ad9a0da1ccc9630e049329832341a4") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "09a7f9efa8122895e7c7eb6a198e8883d6d6d626") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "2ca6c131ba50b75742ce931ddde9434ebe01035a") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "c0bdf889139e5fb3e1efdb91c630c08d370ec249") ; main
 

@@ -70,6 +70,7 @@ launcher, which is also the `x` command, and the engine.
 | `python` | [x-python](https://github.com/jonruttan/x-python) |
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
 | `make` | [x-make](https://github.com/jonruttan/x-make) |
+| `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
 | every other | an x-coreutils applet |
