@@ -41,11 +41,15 @@ the `x` command, and the engine.
 | `cc` | [x-cc](https://github.com/jonruttan/x-cc) |
 | `python` | [x-python](https://github.com/jonruttan/x-python) |
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
+| `make` | [x-make](https://github.com/jonruttan/x-make) |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
 | every other | an x-coreutils applet |
 
-`commands.xon` names the commands that are a lang of their own.
+`commands.xon` names the commands that are a lang of their own. A row may
+name an entry of this repository's in place of the lang's: `make` starts at
+`init/make.x`, which builds with no arguments where x-make's own entry
+starts a session.
 
 ## How a command starts
 
@@ -114,8 +118,6 @@ what moved. The image is rebuilt and published when that is merged.
 - A language that boots from source needs about 4 GB. The image boots each
   lang from its state image.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
-- The shell takes no arguments: `sh -c COMMAND` and `sh FILE` run nothing.
-  x-make is left out for that reason, since a recipe is run by `sh -c`.
 - Writing x-python's state image needs more than 4 GB, so the build does too.
 - `logo` does not read a piped program: a program goes in a file,
   `x -l logo -f FILE`.

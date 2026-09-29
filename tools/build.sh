@@ -30,9 +30,13 @@ lang_name() {
 	sed -n 's/^(lang "\(.*\)").*/\1/p' "$1/lang.xon"
 }
 
-# The commands commands.xon names, as NAME LANG lines: command_rows FILE
+# The commands commands.xon names, as NAME LANG [ENTRY] lines: command_rows FILE
 command_rows() {
-	rows=$(sed -n 's/^(command[[:space:]]\{1,\}\([a-z0-9-]*\)[[:space:]]\{1,\}\([a-z0-9-]*\)).*/\1 \2/p' "$1")
+	space='[[:space:]]\{1,\}'
+	word='\([a-z0-9-]*\)'
+	rows=$(sed -n \
+		-e "s/^(command$space$word$space$word$space\"\([^\"]*\)\").*/\1 \2 \3/p" \
+		-e "s/^(command$space$word$space$word).*/\1 \2/p" "$1")
 	if [ "$(grep -c '^(command' "$1")" != "$(printf '%s\n' "$rows" | grep -c .)" ]; then
 		fail 2 "$1 has a (command ...) row this reader cannot parse"
 	fi
@@ -95,8 +99,12 @@ write_streams() {
 
 	sh "$here/stream.sh" --loader
 	sh "$here/stream.sh" coreutils coreutils
-	command_rows "$commands_file" | while read -r name lang; do
-		sh "$here/stream.sh" "$lang" "$name"
+	command_rows "$commands_file" | while read -r name lang entry; do
+		if [ -n "$entry" ]; then
+			sh "$here/stream.sh" "$lang" "$name" "$init_dir/$entry"
+		else
+			sh "$here/stream.sh" "$lang" "$name"
+		fi
 	done
 	sh "$here/stream.sh" ash init "$init_dir/init.x"
 	for how in poweroff reboot halt; do
@@ -131,7 +139,7 @@ assemble_root() {
 
 	ln -s "$launcher" "$root/init"
 	link_command "$root" x
-	command_rows "$commands_file" | while read -r name lang; do
+	command_rows "$commands_file" | while read -r name lang entry; do
 		link_command "$root" "$name"
 	done
 	for how in poweroff reboot halt; do

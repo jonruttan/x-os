@@ -4,6 +4,9 @@
 ; x-coreutils applet when x-coreutils has one by that name, and is otherwise
 ; not a command.  A row wins over an applet of the same name.
 ;
+; (command NAME LANG "ENTRY") starts LANG at init/ENTRY instead of at the
+; lang's own entry.
+;
 ; init and the power commands are not here: they are this repository's own
 ; programs, run on a lang's state image (see the Dockerfile).
 
@@ -15,3 +18,4 @@
 (command cc      cc)
 (command python  python)
 (command logo    logo)
+(command make    make "make.x")
