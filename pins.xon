@@ -12,7 +12,7 @@
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "03c1278edecb5fc6197dbedf29c39e06422650b2") ; v0.19.0
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "e3e1651fdde7e849cd653eaee9d714e3617d8db4") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "bcd79fc3d44482351857637f4338f002eac1f9a5") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "4a01afea4fe2f821ece534b993c0f5c4ce2066e3") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "3c300115dd3af8f15cac8ec39b235b68516c7075") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "7336c1a5703c5eefeeb52a675983337dba16a53d") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "383e9082f3b17125fcc78837bf61c12b8d94fe3c") ; main
