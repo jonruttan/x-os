@@ -10,16 +10,16 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "aa315b1c374a69b5d555817159ff6a389ae04457") ; v0.23.0
-(source x-ash       "https://github.com/jonruttan/x-ash.git"       "75713b4711de17d97714ff39e247bd55e6d0e7f3") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "bfb7df7124d4c03c6b888dc015a4a90028b4136e") ; main
-(source x-grep      "https://github.com/jonruttan/x-grep.git" "bfd9f9a92f4cb775d69b4c998d13ed182fccd8b7") ; main
-(source x-sed       "https://github.com/jonruttan/x-sed.git" "020c5dd7a4ea5b70d19ae4d769521e366152f8f5") ; main
-(source x-awk       "https://github.com/jonruttan/x-awk.git" "24d68cada133d30bce7d394b3f45797942b957f3") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "b0d87bae6ab002c1a1db828d694d3c2e07539ee3") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "11b9dcd94346d66de5492b902445d535f3ad08ad") ; main
-(source x-logo      "https://github.com/jonruttan/x-logo.git" "253f8c939e1924cd2f35bc30e37664fd4b281b2b") ; main
-(source x-make      "https://github.com/jonruttan/x-make.git" "14325cc3fa9ef4eafb6e582684566fa85e6e6f25") ; main
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "1234c0b535b0f087ef6e673546e165564accd1c0") ; v0.25.0
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "fc638735cb06779cb096784df30206c73c2d1bb5") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "837ca19f48f9938509574ef10abc5e24c48bb55b") ; main
+(source x-grep      "https://github.com/jonruttan/x-grep.git" "e8f1dce2e19d2efda3aacc5ff9330ef14b433061") ; main
+(source x-sed       "https://github.com/jonruttan/x-sed.git" "35a9437feb485e3997b11fdeb72e7fc993f16619") ; main
+(source x-awk       "https://github.com/jonruttan/x-awk.git" "0a11141a6ad67c8c4a5da4e2a3c9be878d402668") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "48325dafb5b4e6a017ba8fa8ff51c0044abbdd86") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "7f61438a8332187b58331ecbe1b8fc81527014b6") ; main
+(source x-logo      "https://github.com/jonruttan/x-logo.git" "cfcd9bc671d62d68aee46634d38968c787250ff0") ; main
+(source x-make      "https://github.com/jonruttan/x-make.git" "7a1c4a8f327687167b50b733083fbc6629dc31a8") ; main
 
 (track x-lang      release)
 (track x-ash       main)
