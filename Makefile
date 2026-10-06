@@ -8,8 +8,12 @@
 #   make test             both, and both tests
 #
 # ARCH is amd64 or arm64 and defaults to the host's.
+# CONTAINER is the container command, docker unless it is set: podman runs
+# the same builds and tests.
 
-ARCH ?= $(shell case "$$(uname -m)" in arm64|aarch64) echo arm64 ;; *) echo amd64 ;; esac)
+ARCH ?= $(if $(filter arm64 aarch64,$(shell uname -m)),arm64,amd64)
+CONTAINER ?= docker
+export CONTAINER
 IMAGE ?= x-os
 PLATFORM = linux/$(ARCH)
 BOOT_DIR = build/boot-$(ARCH)
@@ -22,15 +26,15 @@ fetch: ## Acquire the pinned sources into build/src
 
 .PHONY: container
 container: fetch ## Build the container image
-	docker build --platform $(PLATFORM) --target root -t $(IMAGE):$(ARCH) .
+	$(CONTAINER) build --platform $(PLATFORM) --target root -t $(IMAGE):$(ARCH) .
 
 .PHONY: boot
 boot: fetch ## Build the kernel and the initramfs into build/boot-ARCH
-	docker build --platform $(PLATFORM) --target boot --output $(BOOT_DIR) .
+	$(CONTAINER) build --platform $(PLATFORM) --target boot --output $(BOOT_DIR) .
 
 .PHONY: iso
 iso: fetch ## Build the bootable ISO image into build/iso-ARCH
-	docker build --platform $(PLATFORM) --target iso --output $(ISO_DIR) .
+	$(CONTAINER) build --platform $(PLATFORM) --target iso --output $(ISO_DIR) .
 
 .PHONY: test-container
 test-container: container ## Run the shell in the container

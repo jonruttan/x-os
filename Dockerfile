@@ -49,6 +49,11 @@ RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/
 COPY etc /src/etc
 RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
 
+# Zork I, which Microsoft published under the MIT licence, for infocom to play.
+RUN mkdir -p /rootfs/usr/share/infocom \
+ && cp /src/all/x-infocom/tests/stories/zork1.z3 \
+    /src/all/x-infocom/tests/stories/LICENSE.zork1 /rootfs/usr/share/infocom/
+
 FROM scratch AS root
 COPY --from=build /rootfs /
 ENV PATH=/usr/bin:/bin HOME=/root

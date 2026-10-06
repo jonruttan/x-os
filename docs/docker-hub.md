@@ -20,6 +20,7 @@ For `linux/amd64` and `linux/arm64`.
 | `cc` | [x-cc](https://github.com/jonruttan/x-cc) |
 | `python` | [x-python](https://github.com/jonruttan/x-python) |
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
+| `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
 | every other | an x-coreutils applet |

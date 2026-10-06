@@ -4,6 +4,8 @@
 #
 #   sh tools/container-test.sh IMAGE PLATFORM
 #
+# CONTAINER names the container command, docker when it is not set.
+#
 # The container runs under a memory and a process limit: the shell is the
 # image's own, and nothing else bounds what it starts.
 set -e
@@ -41,7 +43,8 @@ script() {
 		'mkdir /tmp/made' \
 		"printf 'all: out.txt\\n\\t@cat out.txt\\nout.txt: in.txt\\n\\t@sed -e s/in/out/ in.txt > out.txt\\n' > /tmp/made/Makefile" \
 		'echo in-by-make > /tmp/made/in.txt' \
-		'cd /tmp/made && make'
+		'cd /tmp/made && make' \
+		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3"
 }
 
 # A line of the output each must match, in any order.
@@ -63,9 +66,10 @@ expected='^shell-ok$
 ^1007$
 ^\(>>> \)\{0,1\}python-says-1267650600228229401496703205376$
 ^sh-says-42$
-^out-by-make$'
+^out-by-make$
+WELCOME TO ZORK'
 
-if ! out=$(script | docker run --rm -i --platform "$platform" \
+if ! out=$(script | "${CONTAINER:-docker}" run --rm -i --platform "$platform" \
 	--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
 	--pids-limit 256 "$image" 2>&1); then
 	echo "container-test: the container failed" >&2
@@ -93,4 +97,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python and make"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make and infocom"
