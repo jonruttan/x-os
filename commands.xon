@@ -19,3 +19,4 @@
 (command python  python)
 (command logo    logo)
 (command make    make "make.x")
+(command infocom infocom)

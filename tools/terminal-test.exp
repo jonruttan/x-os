@@ -4,6 +4,8 @@
 #
 #   expect tools/terminal-test.exp IMAGE PLATFORM
 #
+# CONTAINER names the container command, docker when it is not set.
+#
 # container-test.sh pipes a script in and never meets the line editor; this
 # does.  Nothing is typed until the prompt it goes to has been drawn: a line
 # editor setting up its terminal discards what was typed ahead of it.
@@ -52,7 +54,11 @@ proc await_line {text what} {
 	await "\n$text\r" $what
 }
 
-spawn docker run --rm -it --platform $platform --memory 3g --pids-limit 256 $image
+set container docker
+if {[info exists env(CONTAINER)] && $env(CONTAINER) ne ""} {
+	set container $env(CONTAINER)
+}
+spawn $container run --rm -it --platform $platform --memory 3g --pids-limit 256 $image
 
 await "exit or ctrl-d to leave" "shell banner"
 await $shell_prompt "shell prompt"

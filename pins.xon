@@ -20,6 +20,7 @@
 (source x-python    "https://github.com/jonruttan/x-python.git" "7f61438a8332187b58331ecbe1b8fc81527014b6") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "cfcd9bc671d62d68aee46634d38968c787250ff0") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "7a1c4a8f327687167b50b733083fbc6629dc31a8") ; main
+(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "dd0d218e9c1621409ca22c5008645364d44879aa") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -31,3 +32,4 @@
 (track x-python    main)
 (track x-logo      main)
 (track x-make      main)
+(track x-infocom   main)
