@@ -16,11 +16,11 @@
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "e8f1dce2e19d2efda3aacc5ff9330ef14b433061") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "35a9437feb485e3997b11fdeb72e7fc993f16619") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "0a11141a6ad67c8c4a5da4e2a3c9be878d402668") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "6b2b7b944eb153e45676464d91e8777159ff2c49") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "48325dafb5b4e6a017ba8fa8ff51c0044abbdd86") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "7f61438a8332187b58331ecbe1b8fc81527014b6") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "cfcd9bc671d62d68aee46634d38968c787250ff0") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "7a1c4a8f327687167b50b733083fbc6629dc31a8") ; main
-(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "5f92d2a09a6bff7f553127412b3f6837de0ba930") ; main
+(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "dd0d218e9c1621409ca22c5008645364d44879aa") ; main
 
 (track x-lang      release)
 (track x-ash       main)
