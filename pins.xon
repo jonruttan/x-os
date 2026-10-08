@@ -10,7 +10,7 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "9f671b798f65e808de824a2e198faf1a686ced67") ; v0.26.0
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "6ae6506b071b8cbf3955b9366ce4ab3175874a77") ; v0.27.0
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "da12a7f17121f8cfe687ccf3b112c790cdafa7d3") ; main
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "95d5f0f0172500b79adcb998b24f4e4f99665599") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "7169fb07282b288814adeeec444e683ae15df210") ; main
