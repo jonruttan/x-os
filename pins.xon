@@ -15,7 +15,7 @@
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "95d5f0f0172500b79adcb998b24f4e4f99665599") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "7169fb07282b288814adeeec444e683ae15df210") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "fcef5570e2fe9124606656d6256969ee1fcadaab") ; main
-(source x-awk       "https://github.com/jonruttan/x-awk.git" "d0df5b03eb46f577ca934d533486675dad696153") ; fix/fs-colon-file (x-awk#22, open)
+(source x-awk       "https://github.com/jonruttan/x-awk.git" "932a5ccd74a24bb77baeb779de81b60dc1ced768") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "53324769ff9944028bcc9164ade9382a61172481") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "707ad1fd293b26826f66fa0bda7d9b39575d64a8") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "8d93af1c0f6d0a4bbe11e20186f7177f9cdd3600") ; main
