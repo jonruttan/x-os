@@ -45,6 +45,8 @@ serial line.
 | Path | What |
 |---|---|
 | `/lib/ld-musl-*.so.1` | musl: the loader and the C library, one file |
+| `/usr/lib/libssl.so.3`, `/usr/lib/libcrypto.so.3` | OpenSSL, Alpine's, which x's Tls opens for https |
+| `/etc/ssl/cert.pem` | the CA bundle Tls checks a server's certificate against |
 | `/usr/libexec/x/x-bin` | the engine |
 | `/usr/libexec/x/launch` | the launcher |
 | `/usr/share/x` | the library, the langs and their state images |
@@ -56,7 +58,8 @@ initramfs, beside a kernel; the kernel is Alpine's `linux-virt`. The ISO
 image holds the two and GRUB, which starts the kernel.
 
 Once the kernel runs there is no shell but x-ash and no C program but the
-launcher, which is also the `x` command, and the engine.
+launcher, which is also the `x` command, and the engine; OpenSSL is a
+library the engine opens, not a program.
 
 ## Commands
 

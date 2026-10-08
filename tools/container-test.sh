@@ -40,6 +40,7 @@ script() {
 		'x -q -l logo -f /tmp/seven.logo' \
 		"echo 'print(\"python-says-\" + str(2 ** 100))' | python" \
 		"sh -c 'echo sh-says-\$((6*7))'" \
+		'wget -q -O /tmp/https.html https://github.com/ && echo https-verified' \
 		'mkdir /tmp/made' \
 		"printf 'all: out.txt\\n\\t@cat out.txt\\nout.txt: in.txt\\n\\t@sed -e s/in/out/ in.txt > out.txt\\n' > /tmp/made/Makefile" \
 		'echo in-by-make > /tmp/made/in.txt' \
@@ -66,6 +67,7 @@ expected='^shell-ok$
 ^1007$
 ^\(>>> \)\{0,1\}python-says-1267650600228229401496703205376$
 ^sh-says-42$
+^https-verified$
 ^out-by-make$
 WELCOME TO ZORK'
 
@@ -97,4 +99,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make and infocom"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom and wget over https"

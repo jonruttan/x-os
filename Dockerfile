@@ -49,6 +49,15 @@ RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/
 COPY etc /src/etc
 RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
 
+# TLS: x's Tls opens libssl.so.3 at run time and checks a server against
+# /etc/ssl/cert.pem, so https (wget, Http) needs OpenSSL and a CA bundle
+# aboard.  Alpine's, built against the same musl; laid out as Alpine lays them.
+RUN apk add --no-cache libssl3 ca-certificates-bundle \
+ && mkdir -p /rootfs/usr/lib /rootfs/etc/ssl/certs \
+ && cp /usr/lib/libssl.so.3 /usr/lib/libcrypto.so.3 /rootfs/usr/lib/ \
+ && cp /etc/ssl/certs/ca-certificates.crt /rootfs/etc/ssl/certs/ \
+ && ln -s certs/ca-certificates.crt /rootfs/etc/ssl/cert.pem
+
 # Zork I, which Microsoft published under the MIT licence, for infocom to play.
 RUN mkdir -p /rootfs/usr/share/infocom \
  && cp /src/all/x-infocom/tests/stories/zork1.z3 \
