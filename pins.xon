@@ -11,16 +11,16 @@
 ; Both tools read this file as text, a row a line.
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "6ae6506b071b8cbf3955b9366ce4ab3175874a77") ; v0.27.0
-(source x-ash       "https://github.com/jonruttan/x-ash.git"       "da12a7f17121f8cfe687ccf3b112c790cdafa7d3") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "95d5f0f0172500b79adcb998b24f4e4f99665599") ; main
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "d64b0b5167e1f32a51d85595846790f424b05343") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "b71611be0872410016b1234bb374d7603561c8ca") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "7169fb07282b288814adeeec444e683ae15df210") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "fcef5570e2fe9124606656d6256969ee1fcadaab") ; main
-(source x-awk       "https://github.com/jonruttan/x-awk.git" "932a5ccd74a24bb77baeb779de81b60dc1ced768") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "53324769ff9944028bcc9164ade9382a61172481") ; main
+(source x-awk       "https://github.com/jonruttan/x-awk.git" "352acec1d4252cf5a44601afba01cc971be18019") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "62e3bd4f256114637024b75bc8f8315d195170cd") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "707ad1fd293b26826f66fa0bda7d9b39575d64a8") ; main
-(source x-logo      "https://github.com/jonruttan/x-logo.git" "8d93af1c0f6d0a4bbe11e20186f7177f9cdd3600") ; main
-(source x-make      "https://github.com/jonruttan/x-make.git" "7a29494a4266f63a6525c01ae5984c4544477858") ; main
-(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "f8645e5f0e2e6612fffa0039508542544b3017d9") ; main
+(source x-logo      "https://github.com/jonruttan/x-logo.git" "bc00d04f6d041cda532732a41d8fef92d943c010") ; main
+(source x-make      "https://github.com/jonruttan/x-make.git" "3666c52c90e2c19dc55e9e35319422782ea2c567") ; main
+(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "14a8a57bd415b6ffdaf1c369fd8e5ec14374b82a") ; main
 
 (track x-lang      release)
 (track x-ash       main)
