@@ -7,6 +7,7 @@
 #   sh build.sh image-dialects DIALECT... write each dialect's image
 #   sh build.sh streams COMMANDS INIT     write the boot streams
 #   sh build.sh root ROOT COMMANDS ETC    assemble the image's root
+#   sh build.sh warm ROOT                 fill ROOT's code cache
 #
 # SOURCES is a directory holding one fetched source a directory, as
 # tools/fetch.sh leaves them; COMMANDS is commands.xon; INIT holds init.x and
@@ -156,6 +157,26 @@ assemble_root() {
 	cp "$etc_dir"/* "$root/etc/"
 }
 
+# The code the interactive sessions compile at their first prompt, compiled
+# into the cache the launcher names, so that a container does not compile it
+# again at every start.
+warm_cache() {
+	root="$1"
+	cache="$root/var/cache/x/asm"
+	bin=$(mktemp -d)
+
+	mkdir -p "$cache"
+	ln -s "$launcher" "$bin/sh"
+	ln -s "$launcher" "$bin/x"
+	clear_code_cache
+	X_ASM_CACHE_DIR="$cache" expect "$here/warm.exp" "$bin"
+	rm -rf "$bin"
+	if [ -z "$(ls "$cache")" ]; then
+		fail 1 "the sessions compiled nothing into $cache"
+	fi
+	echo "build: $(ls "$cache" | wc -l) cached entries in $cache"
+}
+
 if [ $# -lt 1 ]; then
 	fail 2 "usage: build.sh STEP ARG..."
 fi
@@ -177,6 +198,9 @@ case "$step" in
 		;;
 	root)
 		assemble_root "$@"
+		;;
+	warm)
+		warm_cache "$@"
 		;;
 	*)
 		fail 2 "no step named $step"
