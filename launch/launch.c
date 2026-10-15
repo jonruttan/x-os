@@ -9,8 +9,14 @@
  * The command name picks the stream: LAUNCH_DIR/NAME when there is one,
  * and otherwise the applet stream, with NAME passed as the first argument.
  * The name x is the x command, which writes its stream as it goes (x.c).
+ *
+ * Compiled code is cached in CODE_CACHE, which the image is built with
+ * filled, unless X_ASM_CACHE_DIR names another directory.
  */
+#define _POSIX_C_SOURCE 200112L
+
 #include <fcntl.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
@@ -21,6 +27,9 @@
 #endif
 #ifndef LAUNCH_DIR
 #define LAUNCH_DIR "/usr/share/x/launch/"
+#endif
+#ifndef CODE_CACHE
+#define CODE_CACHE "/var/cache/x/asm"
 #endif
 #define APPLET_STREAM "coreutils"
 #define CALLER_FD 3
@@ -99,6 +108,10 @@ int main(int argc, char *argv[])
 	static char *engine_argv[ARGS_MAX];
 	const char *name = invoked_name(argc, argv);
 	int stream_fd, is_applet, i, count = 0;
+
+	if (setenv("X_ASM_CACHE_DIR", CODE_CACHE, 0) != 0) {
+		exit_with_error("cannot name the code cache for ", name);
+	}
 
 	if (strcmp(name, "x") == 0) {
 		return run_x_command(argc, argv);

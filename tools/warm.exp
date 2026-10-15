@@ -1,0 +1,52 @@
+#!/usr/bin/expect -f
+# warm.exp -- run the shell and an x session at a terminal, so that the code
+# each compiles for its first prompt is in the cache X_ASM_CACHE_DIR names.
+#
+#   expect warm.exp BIN
+#
+# BIN holds sh and x, each a link to the launcher.  The line editors compile
+# their painters at the first prompt they draw, and a container starts with
+# an empty cache, so a cache filled here is one the image is built with.
+
+set timeout 600
+set bin [lindex $argv 0]
+if {$bin eq ""} {
+	puts stderr "usage: warm.exp BIN"
+	exit 2
+}
+set env(PATH) "$bin:/usr/bin:/bin"
+set env(TERM) xterm
+
+proc fail {what} {
+	puts stderr "\nwarm: $what"
+	exit 1
+}
+
+proc await {pattern what} {
+	expect {
+		-re $pattern {
+		}
+		timeout {
+			fail "no $what"
+		}
+		eof {
+			fail "the session ended waiting for $what"
+		}
+	}
+}
+
+spawn $bin/sh
+await {\x1b\[K# } "shell prompt"
+send "echo warm\r"
+await "\nwarm\r" "answer from the shell"
+await {\x1b\[K# } "shell prompt after echo"
+send "x\r"
+await {\x1b\[K> } "prompt from x"
+send "(write 1)\r"
+await "\n1\r" "answer from x"
+await {\x1b\[K> } "prompt from x after its answer"
+send "\004"
+await {\x1b\[K# } "shell prompt after x"
+send "exit\r"
+expect eof
+puts "\nwarm: the shell and x drew their prompts"

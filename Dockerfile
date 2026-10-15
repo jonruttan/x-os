@@ -48,6 +48,7 @@ RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/
 
 COPY etc /src/etc
 RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
+RUN apk add --no-cache expect && sh /src/tools/build.sh warm /rootfs
 
 # Zork I, which Microsoft published under the MIT licence, for infocom to play.
 RUN mkdir -p /rootfs/usr/share/infocom \
