@@ -45,6 +45,28 @@ await {\x1b\[K> } "prompt from x"
 send "(write 1)\r"
 await "\n1\r" "answer from x"
 await {\x1b\[K> } "prompt from x after its answer"
+# The TLS client's engines -- X25519, SHA-256, ChaCha20, Poly1305, SHA-512,
+# the base64 decoder and the Montgomery runner -- which connect builds
+# before it dials: a fresh container with an empty cache compiled them for
+# a quarter of a minute while the server waited, and Cloudflare closes the
+# connection first.  Each jit! answers #t when its engine is compiled.
+# (Tls13 ready!) says the same in one call from x-lang v0.31.0 on.
+# The lines are short: the editor redraws the line a character at a time.
+foreach module {x/net/tls13 x/codec/x25519 x/codec/sha256 x/codec/sha512 x/codec/chacha20 x/codec/poly1305 x/codec/base64} {
+	send "(import $module)\r"
+	await {\x1b\[K> } "prompt from x after importing $module"
+}
+send "(import x/codec/mont-jit mont-jit-ready!)\r"
+await {\x1b\[K> } "prompt from x after importing mont-jit"
+send "(write (list (X25519 jit!) (Sha256 jit!) (ChaCha20 jit!)))\r"
+await "\n\\(#t #t #t\\)\r" "the X25519, SHA-256 and ChaCha20 engines"
+await {\x1b\[K> } "prompt from x after three engines"
+send "(write (list (Poly1305 jit!) (Sha512 jit!) (Base64 jit!)))\r"
+await "\n\\(#t #t #t\\)\r" "the Poly1305, SHA-512 and base64 engines"
+await {\x1b\[K> } "prompt from x after six engines"
+send "(write (mont-jit-ready!))\r"
+await "\n#t\r" "the Montgomery runner"
+await {\x1b\[K> } "prompt from x after the engines"
 send "\004"
 await {\x1b\[K# } "shell prompt after x"
 send "exit\r"
