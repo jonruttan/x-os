@@ -44,7 +44,17 @@ script() {
 		"printf 'all: out.txt\\n\\t@cat out.txt\\nout.txt: in.txt\\n\\t@sed -e s/in/out/ in.txt > out.txt\\n' > /tmp/made/Makefile" \
 		'echo in-by-make > /tmp/made/in.txt' \
 		'cd /tmp/made && make' \
-		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3"
+		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
+		'export HOME=/root' \
+		'dropbearkey -t ed25519 -f /tmp/hostkey > /dev/null' \
+		'dropbearkey -t ed25519 -f /tmp/userkey > /dev/null' \
+		'mkdir /tmp/keys' \
+		'dropbearkey -y -f /tmp/userkey | grep ^ssh-ed25519 > /tmp/keys/authorized_keys' \
+		'dropbear -E -r /tmp/hostkey -p 127.0.0.1:2222 -D /tmp/keys -P /tmp/dropbear.pid' \
+		"dbclient -y -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))'" \
+		'echo scp-carried > /tmp/sent' \
+		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
+		'cat /tmp/received'
 }
 
 # A line of the output each must match, in any order.
@@ -67,7 +77,9 @@ expected='^shell-ok$
 ^\(>>> \)\{0,1\}python-says-1267650600228229401496703205376$
 ^sh-says-42$
 ^out-by-make$
-WELCOME TO ZORK'
+WELCOME TO ZORK
+^ssh-says-42$
+^scp-carried$'
 
 if ! out=$(script | "${CONTAINER:-docker}" run --rm -i --platform "$platform" \
 	--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
@@ -97,4 +109,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make and infocom"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom and ssh"

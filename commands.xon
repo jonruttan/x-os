@@ -5,7 +5,7 @@
 ; not a command.  A row wins over an applet of the same name.
 ;
 ; (command NAME LANG "ENTRY") starts LANG at init/ENTRY instead of at the
-; lang's own entry.
+; lang's own entry, which finds the command's name in %command.
 ;
 ; init and the power commands are not here: they are this repository's own
 ; programs, run on a lang's state image (see the Dockerfile).
@@ -20,3 +20,10 @@
 (command logo    logo)
 (command make    make "make.x")
 (command infocom infocom)
+(command dropbear        ssh "ssh.x")
+(command dbclient        ssh "ssh.x")
+(command ssh             ssh "ssh.x")
+(command dropbearkey     ssh "ssh.x")
+(command ssh-keygen      ssh "ssh.x")
+(command dropbearconvert ssh "ssh.x")
+(command scp             ssh "ssh.x")

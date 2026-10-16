@@ -102,7 +102,7 @@ write_streams() {
 	sh "$here/stream.sh" coreutils coreutils
 	command_rows "$commands_file" | while read -r name lang entry; do
 		if [ -n "$entry" ]; then
-			sh "$here/stream.sh" "$lang" "$name" "$init_dir/$entry"
+			sh "$here/stream.sh" "$lang" "$name" "$init_dir/$entry" "(def %command \"$name\")"
 		else
 			sh "$here/stream.sh" "$lang" "$name"
 		fi
