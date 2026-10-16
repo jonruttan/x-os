@@ -54,7 +54,16 @@ script() {
 		"dbclient -y -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
 		'echo scp-carried > /tmp/sent' \
 		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
-		'cat /tmp/received'
+		'cat /tmp/received' \
+		'git init -b main /tmp/repo > /dev/null' \
+		"printf '[user]\\n\\tname = X\\n\\temail = x@x-os\\n' >> /tmp/repo/.git/config" \
+		'cd /tmp/repo && echo git-carried > f && git add f && git commit -q -m one' \
+		'cd /tmp && git clone file:///tmp/repo local 2> /dev/null && cat /tmp/local/f' \
+		"export GIT_SSH_COMMAND='dbclient -y -i /tmp/userkey'" \
+		'cd /tmp && git clone ssh://root@127.0.0.1:2222/tmp/repo remote 2> /dev/null && echo git-over-ssh-$(cat /tmp/remote/f)' \
+		"printf '[user]\\n\\tname = X\\n\\temail = x@x-os\\n' >> /tmp/remote/.git/config" \
+		'cd /tmp/remote && echo more >> f && git add f && git commit -q -m pushed-over-ssh && git branch landed' \
+		'cd /tmp/remote && git push origin landed 2> /dev/null && git -C /tmp/repo log --oneline landed | head -1'
 }
 
 # A line of the output each must match, in any order.
@@ -79,7 +88,10 @@ expected='^shell-ok$
 ^out-by-make$
 WELCOME TO ZORK
 ^ssh-says-42$
-^scp-carried$'
+^scp-carried$
+^git-carried$
+^git-over-ssh-git-carried$
+ pushed-over-ssh$'
 
 if ! out=$(script | "${CONTAINER:-docker}" run --rm -i --platform "$platform" \
 	--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
@@ -109,4 +121,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom and ssh"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh and git"
