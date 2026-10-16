@@ -27,3 +27,6 @@
 (command ssh-keygen      ssh "ssh.x")
 (command dropbearconvert ssh "ssh.x")
 (command scp             ssh "ssh.x")
+(command git              git "git.x")
+(command git-upload-pack  git "git.x")
+(command git-receive-pack git "git.x")
