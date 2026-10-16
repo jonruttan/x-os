@@ -157,7 +157,6 @@ what moved. The image is rebuilt and published when that is merged.
 - A language that boots from source needs about 4 GB. The image boots each
   lang from its state image.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
-- Writing x-python's state image needs more than 4 GB, so the build does too.
 - `logo` does not read a piped program: a program goes in a file,
   `x -l logo -f FILE`.
 - `cc` is x-cc, whose `run` executes a C program. It writes no executable
