@@ -51,7 +51,7 @@ script() {
 		'mkdir /tmp/keys' \
 		'dropbearkey -y -f /tmp/userkey | grep ^ssh-ed25519 > /tmp/keys/authorized_keys' \
 		'dropbear -E -r /tmp/hostkey -p 127.0.0.1:2222 -D /tmp/keys -P /tmp/dropbear.pid' \
-		"dbclient -y -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))'" \
+		"dbclient -y -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
 		'echo scp-carried > /tmp/sent' \
 		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
 		'cat /tmp/received'
