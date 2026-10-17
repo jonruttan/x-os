@@ -21,7 +21,7 @@
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "a39c08a37313fef54fcd0cacc9b8de603766139e") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "8ad9e3caff281c828aca7bd538778751e36e1ecf") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "8b78fb24be8c01d2cd8ead21b0ba9925735efe79") ; main
-(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "69bb7acb9ec5e13bae1af6bcd974b0dd4d0bbc64") ; main
+(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "8b2e8263652206cbc2ec237c3845733a4cc90268") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "a91fa1c1cccd372784abb91e77167cab20816601") ; main
 
 (track x-lang      release)

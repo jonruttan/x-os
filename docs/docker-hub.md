@@ -21,7 +21,7 @@ For `linux/amd64` and `linux/arm64`.
 | `python` | [x-python](https://github.com/jonruttan/x-python) |
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
 | `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
-| `dropbear`, `dbclient`, `ssh`, `dropbearkey`, `ssh-keygen`, `dropbearconvert`, `scp` | [x-ssh](https://github.com/jonruttan/x-ssh): SSH after Dropbear, the server, the client and their tools |
+| `sshd`, `ssh`, `ssh-keygen`, `scp` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool and scp |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
