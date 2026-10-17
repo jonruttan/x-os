@@ -46,12 +46,12 @@ script() {
 		'cd /tmp/made && make' \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
-		'dropbearkey -t ed25519 -f /tmp/hostkey > /dev/null' \
-		'dropbearkey -t ed25519 -f /tmp/userkey > /dev/null' \
-		'mkdir /tmp/keys' \
-		'dropbearkey -y -f /tmp/userkey | grep ^ssh-ed25519 > /tmp/keys/authorized_keys' \
-		'dropbear -E -r /tmp/hostkey -p 127.0.0.1:2222 -D /tmp/keys -P /tmp/dropbear.pid' \
-		"dbclient -y -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
+		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
+		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
+		'mkdir -p /root/.ssh' \
+		'cp /tmp/userkey.pub /root/.ssh/authorized_keys' \
+		'sshd -f /dev/null -o ListenAddress=127.0.0.1 -p 2222 -o PidFile=/tmp/sshd.pid' \
+		"ssh -o StrictHostKeyChecking=accept-new -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
 		'echo scp-carried > /tmp/sent' \
 		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
 		'cat /tmp/received' \
@@ -59,7 +59,7 @@ script() {
 		"printf '[user]\\n\\tname = X\\n\\temail = x@x-os\\n' >> /tmp/repo/.git/config" \
 		'cd /tmp/repo && echo git-carried > f && git add f && git commit -q -m one' \
 		'cd /tmp && git clone file:///tmp/repo local 2> /dev/null && cat /tmp/local/f' \
-		"export GIT_SSH_COMMAND='dbclient -y -i /tmp/userkey'" \
+		"export GIT_SSH_COMMAND='ssh -i /tmp/userkey'" \
 		'cd /tmp && git clone ssh://root@127.0.0.1:2222/tmp/repo remote 2> /dev/null && echo git-over-ssh-$(cat /tmp/remote/f)' \
 		"printf '[user]\\n\\tname = X\\n\\temail = x@x-os\\n' >> /tmp/remote/.git/config" \
 		'cd /tmp/remote && echo more >> f && git add f && git commit -q -m pushed-over-ssh && git branch landed' \

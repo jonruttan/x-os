@@ -71,7 +71,7 @@ launcher, which is also the `x` command, and the engine.
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
 | `make` | [x-make](https://github.com/jonruttan/x-make) |
 | `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
-| `dropbear`, `dbclient`, `ssh`, `dropbearkey`, `ssh-keygen`, `dropbearconvert`, `scp` | [x-ssh](https://github.com/jonruttan/x-ssh): SSH after Dropbear, the server, the client and their tools |
+| `sshd`, `ssh`, `ssh-keygen`, `scp` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool and scp |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
@@ -81,8 +81,8 @@ launcher, which is also the `x` command, and the engine.
 `commands.xon` names the commands that are a lang of their own. A row may
 name an entry of this repository's in place of the lang's: `make` starts at
 `init/make.x`, which builds with no arguments where x-make's own entry
-starts a session; the seven commands of x-ssh, Dropbear's multi-purpose
-binary, start at `init/ssh.x`; x-git's three start at `init/git.x`. A
+starts a session; the four commands of x-ssh start at `init/ssh.x`;
+x-git's three start at `init/git.x`. A
 command started at an entry of this repository's finds its own name in
 `%command`, which picks x-ssh's program or x-git's service.
 
