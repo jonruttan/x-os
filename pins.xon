@@ -10,19 +10,19 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "9543760f5a90ddb1a12d6874c1a90757a4bd2893") ; v0.32.0
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "5a4fa8f9d2e92b9aacad987273de2a6db1c3d2f3") ; v0.33.0
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "e44d53cc6830ef42ee3f91f502363ebabbbc9110") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "00b8b1169cafe408dd6d943237dd1e7799be068b") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "a97bc30d55c85a4d06ea37e9b10eb3c305b4bc08") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "3e3c6456ddbd9ba8607414bf85976449593f9721") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "5a9bc8bb9ed3a273bdb2998118a3eec435cf747d") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "da615a36e7c6608bbbd1ccd921528f200b9de8cd") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "6b7bd8088be7714b86931f80be7f39c8e57d94b2") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "fbe583b36f1cf9a88256655e54871ffa9003e50e") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "8b093a93efb210cf4fe969944657a57de652e0b5") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "a39c08a37313fef54fcd0cacc9b8de603766139e") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "8ad9e3caff281c828aca7bd538778751e36e1ecf") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "8b78fb24be8c01d2cd8ead21b0ba9925735efe79") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "8b2e8263652206cbc2ec237c3845733a4cc90268") ; main
-(source x-git       "https://github.com/jonruttan/x-git.git" "a91fa1c1cccd372784abb91e77167cab20816601") ; main
+(source x-git       "https://github.com/jonruttan/x-git.git" "088e5a7d7d14c7e4f9447a651ed158e5ecbb00c5") ; main
 
 (track x-lang      release)
 (track x-ash       main)
