@@ -27,3 +27,4 @@
 (command git              git "git.x")
 (command git-upload-pack  git "git.x")
 (command git-receive-pack git "git.x")
+(command tmux             tmux "tmux.x")

@@ -29,6 +29,9 @@ set x_prompt {\x1b\[K> }
 set logo_prompt {\n\? $}
 # An empty line of vi's screen: the cursor put at a row's start, then a tilde.
 set vi_empty_line {\x1b\[[0-9]+;1H~}
+# A prompt in a tmux pane, as x-tmux redraws the row: the cursor put at
+# the pane's left edge, the attributes reset, then the prompt.
+set pane_prompt {\x1b\[[0-9]+;[0-9]+H\x1b\[0m# }
 
 proc fail {what} {
 	puts stderr "\nterminal-test: $what"
@@ -107,6 +110,24 @@ send ":wq\r"
 await $shell_prompt "shell prompt after vi"
 send "cat /tmp/note.txt\r"
 await_line "written-in-vi" "the file vi wrote"
+
+# tmux: a session's status line, a command in its pane, a split and a
+# command in the new pane, then C-b d back to the shell.
+await $shell_prompt "shell prompt before tmux"
+send "tmux\r"
+await {\[0\] 0:x-tmux\*} "tmux's status line"
+await $pane_prompt "the first pane's prompt"
+send "echo in-a-pane-\$((6*7))\r"
+await "in-a-pane-42" "answer in the first pane"
+send "\002%"
+await "│" "the border of a split"
+await $pane_prompt "the second pane's prompt"
+send "echo right-pane-\$((6*7))\r"
+await "right-pane-42" "answer in the second pane"
+send "\002d"
+await $shell_prompt "shell prompt after tmux"
+send "echo back-from-tmux\r"
+await_line "back-from-tmux" "answer from the shell after tmux"
 
 await $shell_prompt "shell prompt before exit"
 send "exit\r"
