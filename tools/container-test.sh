@@ -44,9 +44,9 @@ script() {
 		"printf 'all: out.txt\\n\\t@cat out.txt\\nout.txt: in.txt\\n\\t@sed -e s/in/out/ in.txt > out.txt\\n' > /tmp/made/Makefile" \
 		'echo in-by-make > /tmp/made/in.txt' \
 		'cd /tmp/made && make' \
-		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		"printf 'one\\r\\ntwo\\033[1;2HX' > /tmp/screen.txt" \
 		'tmux vt dump /tmp/screen.txt | head -2 | sed -e s/^/tmux-row-/ -e "s/  *|$/|/"' \
+		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
