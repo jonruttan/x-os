@@ -44,6 +44,8 @@ script() {
 		"printf 'all: out.txt\\n\\t@cat out.txt\\nout.txt: in.txt\\n\\t@sed -e s/in/out/ in.txt > out.txt\\n' > /tmp/made/Makefile" \
 		'echo in-by-make > /tmp/made/in.txt' \
 		'cd /tmp/made && make' \
+		"printf 'one\\r\\ntwo\\033[1;2HX' > /tmp/screen.txt" \
+		'tmux vt dump /tmp/screen.txt | head -2 | sed -e s/^/tmux-row-/ -e "s/  *|$/|/"' \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
@@ -87,6 +89,8 @@ expected='^shell-ok$
 ^sh-says-42$
 ^out-by-make$
 WELCOME TO ZORK
+^tmux-row-oXe|$
+^tmux-row-two|$
 ^ssh-says-42$
 ^scp-carried$
 ^git-carried$
@@ -121,4 +125,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh and git"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, git and tmux"

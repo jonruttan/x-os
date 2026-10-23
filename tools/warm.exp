@@ -69,6 +69,15 @@ await "\n#t\r" "the Montgomery runner"
 await {\x1b\[K> } "prompt from x after the engines"
 send "\004"
 await {\x1b\[K# } "shell prompt after x"
+# x-tmux's screen engine, compiled and proven as a session starts: a pane
+# drawn by the reference engine until it is, and seven seconds to build.
+send "x -l tmux\r"
+await {\x1b\[Ktmux> } "prompt from x-tmux"
+send "(write (vt-jit!))\r"
+await "\n#t\r" "x-tmux's compiled screen"
+await {\x1b\[Ktmux> } "prompt from x-tmux after its engine"
+send "\004"
+await {\x1b\[K# } "shell prompt after x-tmux"
 send "exit\r"
 expect eof
 puts "\nwarm: the shell and x drew their prompts"
