@@ -28,8 +28,15 @@ if [ "$1" = "--loader" ]; then
 fi
 
 if [ "$1" = "--applets" ]; then
-	sed -n '/^(def %cu-applets/,/^(def %cu-find-applet/s/.*(pair "\([^"]*\)".*/\1/p' \
-		"$share/langs/coreutils/cu/cli.x"
+	# cu/applets.x: each applet a static method of Applets, and [ and [[
+	# by def-static!; before it, an alist in cu/cli.x
+	cu="$share/langs/coreutils/cu"
+	if [ -f "$cu/applets.x" ]; then
+		sed -n -e 's/^    (method \([^ ]*\) (self argv .*/\1/p' \
+			-e 's/^(Applets def-static! (Str8 ->sym "\([^"]*\)").*/\1/p' "$cu/applets.x"
+	else
+		sed -n '/^(def %cu-applets/,/^(def %cu-find-applet/s/.*(pair "\([^"]*\)".*/\1/p' "$cu/cli.x"
+	fi
 	exit 0
 fi
 
