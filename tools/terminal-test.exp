@@ -112,7 +112,9 @@ send "cat /tmp/note.txt\r"
 await_line "written-in-vi" "the file vi wrote"
 
 # tmux: a session's status line, a command in its pane, a split and a
-# command in the new pane, then C-b d back to the shell.
+# command in the new pane, C-b d back to the shell with the server still
+# running, ls and attach to it, copy mode and out of it, then kill-server so
+# no server outlives the test.
 await $shell_prompt "shell prompt before tmux"
 send "tmux\r"
 await {\[0\] 0:x-tmux\*} "tmux's status line"
@@ -125,9 +127,27 @@ await $pane_prompt "the second pane's prompt"
 send "echo right-pane-\$((6*7))\r"
 await "right-pane-42" "answer in the second pane"
 send "\002d"
+await {\[detached \(from session 0\)\]} "tmux's detach line"
 await $shell_prompt "shell prompt after tmux"
 send "echo back-from-tmux\r"
 await_line "back-from-tmux" "answer from the shell after tmux"
+await $shell_prompt "shell prompt before tmux ls"
+send "tmux ls\r"
+await {0: 1 windows \(created } "the session tmux ls lists"
+await $shell_prompt "shell prompt before tmux attach"
+send "tmux attach\r"
+await "right-pane-42" "the session's panes again after attach"
+send "\002\["
+await {\[0/[0-9]+\]} "copy mode's position"
+send "q"
+sleep 1
+send "\002d"
+await {\[detached \(from session 0\)\]} "tmux's detach line after attach"
+await $shell_prompt "shell prompt before kill-server"
+send "tmux kill-server\r"
+await $shell_prompt "shell prompt after kill-server"
+send "tmux ls\r"
+await "no server running on" "tmux ls after kill-server"
 
 await $shell_prompt "shell prompt before exit"
 send "exit\r"

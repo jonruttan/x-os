@@ -23,7 +23,7 @@ For `linux/amd64` and `linux/arm64`.
 | `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
 | `sshd`, `ssh`, `ssh-keygen`, `scp` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool and scp |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
-| `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): a window of panes, each a shell; C-b `%` and `"` split, `o` switches, `x` kills, `d` leaves |
+| `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): a window of panes, each a shell; C-b `%` and `"` split, `o` switches, `x` kills, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
 | every other | an x-coreutils applet |
