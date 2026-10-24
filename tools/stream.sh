@@ -28,8 +28,7 @@ if [ "$1" = "--loader" ]; then
 fi
 
 if [ "$1" = "--applets" ]; then
-	sed -n '/^(def %cu-applets/,/^(def %cu-find-applet/s/.*(pair "\([^"]*\)".*/\1/p' \
-		"$share/langs/coreutils/cu/cli.x"
+	x -l coreutils -f "$(dirname "$0")/applets.x"
 	exit 0
 fi
 
