@@ -596,11 +596,12 @@ static int compose_stream(const struct options *options,
 }
 
 /**
- * Build the engine's argv: its path, the flags, --batch, the arguments.
+ * Build the engine's argv: its path, the flags, --batch, "--", the
+ * arguments.  (Sys args 'program) answers what follows the "--".
  *
  * @param options      const struct options* -- What the command line asks for
  * @param batch        int -- Whether the engine runs in batch
- * @param engine_argv  char** -- Filled in and NULL-terminated; LIST_MAX + 2
+ * @param engine_argv  char** -- Filled in and NULL-terminated; LIST_MAX + 3
  *                     entries past the flags
  * @return int -- 0, or -1 when there are too many arguments
  */
@@ -621,6 +622,7 @@ static int build_engine_argv(const struct options *options, int batch,
 	if (batch) {
 		engine_argv[count++] = "--batch";
 	}
+	engine_argv[count++] = "--";
 	for (i = 0; i < options->argument_count; i++) {
 		engine_argv[count++] = options->arguments[i];
 	}

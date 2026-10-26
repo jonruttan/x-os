@@ -135,8 +135,11 @@ int main(int argc, char *argv[])
 	}
 	close(stream_fd);
 
+	/* "--" ends the engine's options: (Sys args 'program) answers what
+	 * follows it, so the command's arguments are never taken for them. */
 	engine_argv[count++] = ENGINE;
 	engine_argv[count++] = "--batch";
+	engine_argv[count++] = "--";
 	if (is_applet) {
 		engine_argv[count++] = (char *)name;
 	}

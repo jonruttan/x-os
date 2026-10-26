@@ -3,12 +3,7 @@
 ;
 ; x-ssh names its program by its first operand.  Each of those names is a
 ; command here, its stream told which by %command, so `ssh host cmd` is
-; x-ssh's `ssh host cmd`.  The launcher starts the engine as its path, its
-; flags and --batch, then the command's arguments, with no "--" between:
-; the first three are left out.
+; x-ssh's `ssh host cmd`.  The command's arguments are what follows the
+; launcher's "--".
 (import ssh/base)
-(def %engine-flag?
-  (fn (_ a) (List any? (fn (_ f) (str=? a f)) (list "--batch" "--quiet" "--no-color"))))
-(def %operands
-  (fn (self l) (if (if (null? l) #f (%engine-flag? (first l))) (self (rest l)) l)))
-(ssh-main (pair %command (%operands (rest args))))
+(ssh-main (pair %command (rest (Sys args (lit program)))))
