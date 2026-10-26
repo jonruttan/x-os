@@ -54,6 +54,9 @@ script() {
 		'cp /tmp/userkey.pub /root/.ssh/authorized_keys' \
 		'sshd -f /dev/null -o ListenAddress=127.0.0.1 -p 2222 -o PidFile=/tmp/sshd.pid -o "Subsystem=sftp internal-sftp"' \
 		"ssh -o StrictHostKeyChecking=accept-new -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
+		'eval "$(ssh-agent -s)" > /dev/null && ssh-add -q /tmp/userkey' \
+		"ssh -o IdentityFile=none -p 2222 root@127.0.0.1 'echo agent-says-\$((6*6))' < /dev/null" \
+		'ssh-agent -k > /dev/null' \
 		'echo scp-carried > /tmp/sent' \
 		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
 		'cat /tmp/received' \
@@ -92,6 +95,7 @@ WELCOME TO ZORK
 ^tmux-row-oXe|$
 ^tmux-row-two|$
 ^ssh-says-42$
+^agent-says-36$
 ^scp-carried$
 ^git-carried$
 ^git-over-ssh-git-carried$
@@ -125,4 +129,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, git and tmux"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, git and tmux"

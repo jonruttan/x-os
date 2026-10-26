@@ -1,4 +1,5 @@
-; ssh.x -- x-ssh's programs: sshd, ssh, ssh-keygen and scp.
+; ssh.x -- x-ssh's programs: sshd, ssh, ssh-keygen, scp, sftp, sftp-server,
+; ssh-agent and ssh-add.
 ;
 ; x-ssh names its program by its first operand.  Each of those names is a
 ; command here, its stream told which by %command, so `ssh host cmd` is
