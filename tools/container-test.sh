@@ -52,7 +52,7 @@ script() {
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
 		'mkdir -p /root/.ssh' \
 		'cp /tmp/userkey.pub /root/.ssh/authorized_keys' \
-		'sshd -f /dev/null -o ListenAddress=127.0.0.1 -p 2222 -o PidFile=/tmp/sshd.pid' \
+		'sshd -f /dev/null -o ListenAddress=127.0.0.1 -p 2222 -o PidFile=/tmp/sshd.pid -o "Subsystem=sftp internal-sftp"' \
 		"ssh -o StrictHostKeyChecking=accept-new -i /tmp/userkey -p 2222 root@127.0.0.1 'echo ssh-says-\$((6*7))' < /dev/null" \
 		'echo scp-carried > /tmp/sent' \
 		'scp -P 2222 -i /tmp/userkey /tmp/sent root@127.0.0.1:/tmp/received' \
