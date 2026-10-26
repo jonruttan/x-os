@@ -114,11 +114,12 @@ await_line "written-in-vi" "the file vi wrote"
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window
-# and back to the first, ls counting both, then kill-server so no server
-# outlives the test.
+# and back to the first, the first renamed with C-b , and ls counting
+# both, then kill-server so no server outlives the test.  A window is
+# named after its program, so a name matches whatever it is.
 await $shell_prompt "shell prompt before tmux"
 send "tmux\r"
-await {\[0\] \x1b\[4m0:x-tmux\*} "tmux's status line"
+await {\[0\] \x1b\[4m0:[^ \x1b]*\*} "tmux's status line"
 await $pane_prompt "the first pane's prompt"
 send "echo in-a-pane-\$((6*7))\r"
 await "in-a-pane-42" "answer in the first pane"
@@ -143,11 +144,15 @@ await {\[0/[0-9]+\]} "copy mode's position"
 send "q"
 sleep 1
 send "\002c"
-await {0:x-tmux- \x1b\[4m1:x-tmux\*} "a second window on the status line"
+await {0:[^ \x1b]*- \x1b\[4m1:[^ \x1b]*\*} "a second window on the status line"
 await $pane_prompt "the second window's prompt"
 send "\0020"
-await {\x1b\[4m0:x-tmux\*\x1b\[24m 1:x-tmux-} "the first window shown again"
+await {\x1b\[4m0:[^ \x1b]*\*\x1b\[24m 1:[^ \x1b]*-} "the first window shown again"
 await "right-pane-42" "the first window's panes"
+send "\002,"
+await {\(rename-window\) } "C-b ,'s prompt"
+send "\025work\r"
+await {\x1b\[4m0:work\*} "the first window renamed"
 send "\002d"
 await {\[detached \(from session 0\)\]} "tmux's detach line after attach"
 await $shell_prompt "shell prompt before tmux ls of two windows"
