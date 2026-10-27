@@ -127,9 +127,11 @@ await_line "back-from-browse" "answer from the shell after browse"
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window
-# and back to the first, the first renamed with C-b , and ls counting
-# both, then kill-server so no server outlives the test.  A window is
-# named after its program, so a name matches whatever it is.
+# and back to the first, the first renamed with C-b , an answer copied
+# in copy mode (emacs's keys: no EDITOR names vi) and C-b ] pasting it
+# into a sum whose answer only the paste makes, and ls counting both,
+# then kill-server so no server outlives the test.  A window is named
+# after its program, so a name matches whatever it is.
 await $shell_prompt "shell prompt before tmux"
 send "tmux\r"
 await {\[0\] \x1b\[4m0:[^ \x1b]*\*} "tmux's status line"
@@ -166,6 +168,19 @@ send "\002,"
 await {\(rename-window\) } "C-b ,'s prompt"
 send "\025work\r"
 await {\x1b\[4m0:work\*} "the first window renamed"
+send "echo \$((20+1))\r"
+await {\x1b\[0m21 } "the answer to copy"
+await $pane_prompt "the prompt after it"
+send "\002\["
+await {\[0/[0-9]+\]} "copy mode's position before a selection"
+send "\033\[A\001"
+send -null
+send "\005\033w"
+sleep 1
+send "echo pasted-\$((2*"
+send "\002\]"
+send "))\r"
+await "pasted-42" "the answer the paste made"
 send "\002d"
 await {\[detached \(from session 0\)\]} "tmux's detach line after attach"
 await $shell_prompt "shell prompt before tmux ls of two windows"

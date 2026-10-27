@@ -73,7 +73,7 @@ launcher, which is also the `x` command, and the engine.
 | `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
 | `sshd`, `ssh`, `ssh-keygen`, `scp`, `sftp`, `sftp-server`, `ssh-agent`, `ssh-add` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool, scp, SFTP and agent |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
-| `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): numbered windows of panes, each a shell, named after its program; C-b `%` and `"` split, `o` switches, `x` kills, `c` makes a window, `n` `p` `l` `0`-`9` show one, `&` kills one, `,` renames one, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
+| `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): numbered windows of panes, each a shell, named after its program; C-b `%` and `"` split, `o` switches, `x` kills, `c` makes a window, `n` `p` `l` `0`-`9` show one, `&` kills one, `,` renames one, `d` detaches, `[` scrolls back, selects and copies, `]` pastes; `tmux attach`, `ls` and `kill-server` reach the server |
 | `browse` | [x-browse](https://github.com/jonruttan/x-browse): a terminal browser for Markdown, local or over http(s), with tabs and history; `browse -dump` writes a page out with its references |
 | `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
