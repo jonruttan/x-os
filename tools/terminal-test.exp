@@ -121,6 +121,8 @@ send "links /tmp/term.md\r"
 await "Linkspage" "the page's heading in links"
 send "q"
 await $shell_prompt "shell prompt after links"
+send "echo back-from-links\r"
+await_line "back-from-links" "answer from the shell after links"
 
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
