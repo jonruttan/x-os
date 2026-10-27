@@ -9,19 +9,24 @@
  *   (def %IMG-PATH "IMAGE")      the lang's state image
  *   the image loader              lib/img.x and tools/dev/image-read.x
  *   (set! %batch? ())             when there is a session to hand over
- *   (guard (_ ()) (batch))        when there is a program: a file, stdin or -c
+ *   (guard (_ ()) (batch))        a dialect, with a program: a file, stdin or -c
  *   the lang's entry              a lang bundle's run.x
- *   the files                     -F's, then -f's, each as (include "FILE")
+ *   the files                     -F's, then -f's; a dialect's as (include "FILE")
  *   stdin                         piped program text, for a dialect
  *   the expressions               -c's, one a line
  *   the launcher                  lib/x/repl/launch.x, when a session is owed
  *
- * The batch loop (lib/x/repl/batch.x) reads the program after it under a
- * guard, so a raise is reported with the raise site's file and line and the
- * run ends with status 1.  The files are (include "FILE") forms, which is
- * what gives their forms a file and a line.  Guarded, because a library
- * without the loop leaves the name unbound: there the guard answers nil
- * and the engine's own loop reads the program as it always did.
+ * A dialect's program is read by the batch loop (lib/x/repl/batch.x), which
+ * evaluates each form after it under a guard, so a raise is reported with
+ * the raise site's file and line and the run ends with status 1.  The files
+ * are (include "FILE") forms, which is what gives their forms a file and a
+ * line.  Guarded, because a library without the loop leaves the name
+ * unbound: there the guard answers nil and the engine's own loop reads the
+ * program as it always did.
+ *
+ * A bundle's stream is as it was: its entry reads what follows it as text
+ * in the bundle's own language (logo-batch, python's), so a file is cat'd,
+ * not included, and no loop is put ahead of the entry.
  *
  * The arguments after the options reach the engine after its flags, as the
  * wrapper passes them.  A lang with no state image is an error: there is no
@@ -567,9 +572,10 @@ static int find_lang(const char *name, struct lang *lang)
  * Compose the stream by the wrapper's rules.  A lang's entry counts as a
  * file, a file or an expression means batch, and with neither a piped stdin
  * is the program.  The launcher is owed to a session, and an expression
- * ends the run, so it takes the launcher away.  A program -- a file, the
- * piped stdin or an expression -- is read by the batch loop, emitted ahead
- * of it; the files reach the loop as include forms.
+ * ends the run, so it takes the launcher away.  A dialect's program -- a
+ * file, the piped stdin or an expression -- is read by the batch loop,
+ * emitted ahead of it, and its files reach the loop as include forms; a
+ * bundle's entry reads its own program, so its stream is unchanged.
  *
  * @param options  const struct options* -- What the command line asks for
  * @param lang     const struct lang* -- The lang
@@ -619,7 +625,8 @@ static int compose_stream(const struct options *options,
 	if (batch_reset && stream_add(stream, PIECE_TEXT, batch_reset_form) < 0) {
 		return -1;
 	}
-	if ((options->file_count > 0 || stdin_is_program
+	if ( ! lang->is_bundle
+		&& (options->file_count > 0 || stdin_is_program
 			|| options->expression_count > 0)
 		&& stream_add(stream, PIECE_TEXT, batch_form) < 0) {
 		return -1;
@@ -628,7 +635,8 @@ static int compose_stream(const struct options *options,
 		return -1;
 	}
 	for (i = 0; i < options->file_count; i++) {
-		if (stream_add(stream, PIECE_INCLUDE, options->files[i]) < 0) {
+		if (stream_add(stream, lang->is_bundle ? PIECE_FILE : PIECE_INCLUDE,
+			options->files[i]) < 0) {
 			return -1;
 		}
 	}
