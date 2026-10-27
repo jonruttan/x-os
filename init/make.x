@@ -4,4 +4,4 @@
 ; it has none.  A make with no arguments builds the default goal, so the
 ; command always builds.
 (import mk/base)
-(mk-main args)
+(mk-main (rest (Sys args (lit program))))
