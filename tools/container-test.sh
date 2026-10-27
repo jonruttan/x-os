@@ -47,6 +47,8 @@ script() {
 		'cd /tmp/made && make' \
 		"printf 'one\\r\\ntwo\\033[1;2HX' > /tmp/screen.txt" \
 		'tmux vt dump /tmp/screen.txt | head -2 | sed -e s/^/tmux-row-/ -e "s/  *|$/|/"' \
+		"printf '# Hi\\n\\nA [link](b.md).\\n' > /tmp/page.md" \
+		'links -dump /tmp/page.md | head -3 | sed -e s/^/links-/' \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
@@ -99,6 +101,8 @@ expected='^shell-ok$
 WELCOME TO ZORK
 ^tmux-row-oXe|$
 ^tmux-row-two|$
+^links-Hi$
+^links-A \[1\]link\.$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
@@ -135,4 +139,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git and tmux"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux and links"
