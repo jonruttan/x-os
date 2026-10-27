@@ -32,4 +32,4 @@
 (command git-upload-pack  git "git.x")
 (command git-receive-pack git "git.x")
 (command tmux             tmux "tmux.x")
-(command links            links "links.x")
+(command browse           browse "browse.x")

@@ -24,7 +24,7 @@
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "44bb80b3855caa1d11781444048a03b005a1482a") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "7ca8eb02f55edd6d985bfdad92dccb0d62d7704b") ; main
 (source x-tmux      "https://github.com/jonruttan/x-tmux.git" "3f2f572e4dd78bc755155ec5f3b2bbbb6b1a1c9e") ; main
-(source x-links     "https://github.com/jonruttan/x-links.git" "f4f7ed3c389456d4765bd9e79d712fb1fe1d2576") ; main
+(source x-browse    "https://github.com/jonruttan/x-browse.git" "0d8e866e4b0fb8288c49f332a400ea6000db8b2f") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -40,4 +40,4 @@
 (track x-ssh       main)
 (track x-git       main)
 (track x-tmux      main)
-(track x-links     main)
+(track x-browse    main)
