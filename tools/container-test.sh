@@ -28,6 +28,7 @@ script() {
 		'grep -n daemon /etc/group' \
 		'sed -e s/root/ROOT/ /etc/group' \
 		'cat /etc/group | grep -c x' \
+		"printf 'a\\n--batch\\n' | grep -e --batch" \
 		'cat /etc/group | sed -e s/daemon/PIPED/' \
 		"awk -F: '{ print \"awk-\" \$1 }' /etc/group" \
 		'cat /etc/hello.c' \
@@ -88,6 +89,7 @@ expected='^shell-ok$
 ^hello from C, 42$
 ^2$
 ^PIPED:x:1:$
+^--batch$
 ^x-says-123$
 ^xe-says-1/2$
 ^x-piped-42$

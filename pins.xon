@@ -11,19 +11,19 @@
 ; Both tools read this file as text, a row a line.
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "26182e87088e8fb613c0aa6c8e00164597c828fa") ; v0.40.0
-(source x-ash       "https://github.com/jonruttan/x-ash.git"       "de303b4c99026db502520faeedc29ba68071295c") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "ca635f5cd5fbb8d2fc75dd890fcda5ae143d7c5b") ; main
-(source x-grep      "https://github.com/jonruttan/x-grep.git" "8c61404b2650e27a2e48cb82bb99a182ef8fb36e") ; main
-(source x-sed       "https://github.com/jonruttan/x-sed.git" "40ac847b59856cf80c0c643f97d7293918d97eb1") ; main
-(source x-awk       "https://github.com/jonruttan/x-awk.git" "b41f975fa01a502cdda9090f5d44fdbeaa0857ee") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "6c431fcfb0560bf6a5ca769ce63adc402d02053a") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "08b3535ecaa7a23a526ac29084095aed55fd135c") ; main
+(source x-ash       "https://github.com/jonruttan/x-ash.git"       "30a5b960c3b7221a81944e917249613ed58f5979") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "51c2b2da942160ff3ee9f156e811c4c2badbcf2c") ; main
+(source x-grep      "https://github.com/jonruttan/x-grep.git" "cea2fcc5462e19124843212e1d7b135d63a5d3c3") ; main
+(source x-sed       "https://github.com/jonruttan/x-sed.git" "332b5e3f361f86f5e95ef4e6bfa4e80148df6ae5") ; main
+(source x-awk       "https://github.com/jonruttan/x-awk.git" "1f689b51bd9ebd0d7af050faa006397835f0d9c7") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "8694971a95a9000d43d23161ab07eba4a18eadcd") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "2cc6f715876b53f96ccbd4ebecef484ebe605c88") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "a53756c6be43f3365bc22ee2cb57bf700ad109a8") ; main
-(source x-make      "https://github.com/jonruttan/x-make.git" "0bd79f4745ecc4897d4577cf201ecda8ce333b0c") ; main
-(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "29de7a991fecb9e4b5202888e1e655693c8c19d0") ; main
+(source x-make      "https://github.com/jonruttan/x-make.git" "9246146cee3f912faf259d24f5f339f0cbddf516") ; main
+(source x-infocom   "https://github.com/jonruttan/x-infocom.git" "ad3f5f93089e90807b5bc07a7587d94e9312ea39") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "44bb80b3855caa1d11781444048a03b005a1482a") ; main
-(source x-git       "https://github.com/jonruttan/x-git.git" "790808a1bdcc674606c050df8fb4e0d1dad78892") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "1c65c968b4d7e2c2f4b79ae260efcecda47540fa") ; main
+(source x-git       "https://github.com/jonruttan/x-git.git" "7ca8eb02f55edd6d985bfdad92dccb0d62d7704b") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "3f2f572e4dd78bc755155ec5f3b2bbbb6b1a1c9e") ; main
 (source x-links     "https://github.com/jonruttan/x-links.git" "f4f7ed3c389456d4765bd9e79d712fb1fe1d2576") ; main
 
 (track x-lang      release)
