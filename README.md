@@ -74,7 +74,7 @@ launcher, which is also the `x` command, and the engine.
 | `sshd`, `ssh`, `ssh-keygen`, `scp`, `sftp`, `sftp-server`, `ssh-agent`, `ssh-add` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool, scp, SFTP and agent |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): numbered windows of panes, each a shell, named after its program; C-b `%` and `"` split, `o` switches, `x` kills, `c` makes a window, `n` `p` `l` `0`-`9` show one, `&` kills one, `,` renames one, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
-| `links` | [x-links](https://github.com/jonruttan/x-links): a terminal browser for Markdown, local or over http(s), with tabs and history; `links -dump` writes a page out with its references |
+| `browse` | [x-browse](https://github.com/jonruttan/x-browse): a terminal browser for Markdown, local or over http(s), with tabs and history; `browse -dump` writes a page out with its references |
 | `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
@@ -86,7 +86,7 @@ name an entry of this repository's in place of the lang's: `make` starts at
 starts a session; the four commands of x-ssh start at `init/ssh.x`;
 x-git's three start at `init/git.x`; `tmux` starts at `init/tmux.x`, which
 opens a session with no arguments, as tmux does, where x-tmux's own entry
-starts a REPL; `links` starts at `init/links.x`, which browses the current
+starts a REPL; `browse` starts at `init/browse.x`, which browses the current
 directory with no arguments. A
 command started at an entry of this repository's finds its own name in
 `%command`, which picks x-ssh's program or x-git's service.
