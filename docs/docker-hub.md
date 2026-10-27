@@ -24,6 +24,7 @@ For `linux/amd64` and `linux/arm64`.
 | `sshd`, `ssh`, `ssh-keygen`, `scp`, `sftp`, `sftp-server`, `ssh-agent`, `ssh-add` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool, scp, SFTP and agent |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): a window of panes, each a shell; C-b `%` and `"` split, `o` switches, `x` kills, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
+| `links` | [x-links](https://github.com/jonruttan/x-links): a terminal browser for Markdown, local or over http(s), with tabs and history; `links -dump` writes a page out with its references |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
 | every other | an x-coreutils applet |

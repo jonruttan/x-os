@@ -111,6 +111,17 @@ await $shell_prompt "shell prompt after vi"
 send "cat /tmp/note.txt\r"
 await_line "written-in-vi" "the file vi wrote"
 
+# links: a page in the browser, its heading drawn, and q back to the
+# shell.  The heading is spelled out by printf so that the command's echo
+# is not what matches.
+await $shell_prompt "shell prompt before links"
+send "printf '# Links%s\\n\\nA line.\\n' page > /tmp/term.md\r"
+await $shell_prompt "shell prompt after the page is written"
+send "links /tmp/term.md\r"
+await "Linkspage" "the page's heading in links"
+send "q"
+await $shell_prompt "shell prompt after links"
+
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window
