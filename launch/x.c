@@ -9,11 +9,22 @@
  *   (def %IMG-PATH "IMAGE")      the lang's state image
  *   the image loader              lib/img.x and tools/dev/image-read.x
  *   (set! %batch? ())             when there is a session to hand over
+ *   (guard (_ ()) (batch))        when the engine runs in batch
  *   the lang's entry              a lang bundle's run.x
- *   the files                     -F's, then -f's
+ *   the files                     -F's, then -f's; a dialect's as (include "FILE")
  *   stdin                         piped program text, for a dialect
  *   the expressions               -c's, one a line
  *   the launcher                  lib/x/repl/launch.x, when a session is owed
+ *
+ * The batch loop (lib/x/repl/batch.x) evaluates each form after it under a
+ * guard, so a raise is reported with the raise site's file and line and the
+ * run ends with status 1.  A dialect's files are (include "FILE") forms,
+ * which is what gives their forms a file and a line.  A bundle's file is
+ * cat'd as it was: the bundle's entry reads what follows it as text in its
+ * own language (logo-batch, python's loop), and an include form there would
+ * be read as that.  Guarded, because a library without the loop leaves the
+ * name unbound: there the guard answers nil and the engine's own loop reads
+ * the program as it always did.
  *
  * The arguments after the options reach the engine after its flags, as the
  * wrapper passes them.  A lang with no state image is an error: there is no
@@ -49,15 +60,22 @@
 #define LIST_MAX 256
 
 static const char batch_reset_form[] = "(set! %batch? ())\n";
+static const char batch_form[] = "(guard (_ ()) (batch))\n";
+static const char include_open[] = "(include \"";
+static const char include_close[] = "\")\n";
 
 /** What a piece of the stream is read from. */
 enum piece_kind {
 	PIECE_TEXT,
 	PIECE_FILE,
+	PIECE_INCLUDE,
 	PIECE_CALLER_STDIN
 };
 
-/** A piece of the stream: text, a file's path, or the caller's stdin. */
+/**
+ * A piece of the stream: text, a file's path, a path to emit as an include
+ * form, or the caller's stdin.
+ */
 struct stream_piece {
 	enum piece_kind kind;
 	const char *value;
@@ -249,6 +267,16 @@ static void stream_write(const struct stream *stream, int fd)
 		if (piece->kind == PIECE_TEXT) {
 			result = write_fully(fd, piece->value, strlen(piece->value));
 		}
+		else if (piece->kind == PIECE_INCLUDE) {
+			result = write_fully(fd, include_open, sizeof include_open - 1);
+			if (result == 0) {
+				result = write_fully(fd, piece->value, strlen(piece->value));
+			}
+			if (result == 0) {
+				result = write_fully(fd, include_close,
+					sizeof include_close - 1);
+			}
+		}
 		else if (piece->kind == PIECE_CALLER_STDIN) {
 			result = copy_descriptor(0, fd);
 		}
@@ -284,6 +312,9 @@ static void stream_print(const struct stream *stream, char *engine_argv[])
 		if (piece->kind == PIECE_CALLER_STDIN) {
 			print_error("piece: stdin", NULL, NULL);
 		}
+		else if (piece->kind == PIECE_INCLUDE) {
+			print_error("piece: ", include_open, piece->value);
+		}
 		else {
 			print_error("piece: ", piece->value, NULL);
 		}
@@ -316,6 +347,24 @@ static void print_usage(void)
 		write(1, lines[i], strlen(lines[i]));
 		write(1, "\n", 1);
 	}
+}
+
+/**
+ * Refuse a program file path that cannot be emitted as an x-lang string:
+ * one holding a double quote or a backslash, as the wrapper refuses it.
+ *
+ * @param path  const char* -- The path
+ * @return int -- 0, or -1 when the path was refused
+ */
+static int path_form_safe(const char *path)
+{
+	if (strchr(path, '"') || strchr(path, '\\')) {
+		print_error("program file path contains a quote or backslash: ",
+			path, NULL);
+		return -1;
+	}
+
+	return 0;
 }
 
 /**
@@ -382,7 +431,7 @@ static enum options_result read_options(int argc, char *argv[],
 			/* -f names the one file to run: it takes the place of any
 			 * named before it, as the wrapper has it. */
 			value = option_value(argc, argv, &i, "a file");
-			if ( ! value) {
+			if ( ! value || path_form_safe(value) < 0) {
 				return OPTIONS_FAILED;
 			}
 			options->files[0] = value;
@@ -396,7 +445,7 @@ static enum options_result read_options(int argc, char *argv[],
 			/* -F loads a file ahead of the ones named before it, and
 			 * the session follows. */
 			value = option_value(argc, argv, &i, "a file");
-			if ( ! value) {
+			if ( ! value || path_form_safe(value) < 0) {
 				return OPTIONS_FAILED;
 			}
 			if (options->file_count >= LIST_MAX) {
@@ -521,7 +570,9 @@ static int find_lang(const char *name, struct lang *lang)
  * Compose the stream by the wrapper's rules.  A lang's entry counts as a
  * file, a file or an expression means batch, and with neither a piped stdin
  * is the program.  The launcher is owed to a session, and an expression
- * ends the run, so it takes the launcher away.
+ * ends the run, so it takes the launcher away.  In batch the loop is
+ * emitted ahead of what it reads; a dialect's files reach it as include
+ * forms, a bundle's entry reads its own program, so its file is cat'd.
  *
  * @param options  const struct options* -- What the command line asks for
  * @param lang     const struct lang* -- The lang
@@ -571,11 +622,15 @@ static int compose_stream(const struct options *options,
 	if (batch_reset && stream_add(stream, PIECE_TEXT, batch_reset_form) < 0) {
 		return -1;
 	}
+	if (*batch && stream_add(stream, PIECE_TEXT, batch_form) < 0) {
+		return -1;
+	}
 	if (lang->is_bundle && stream_add(stream, PIECE_FILE, lang->entry) < 0) {
 		return -1;
 	}
 	for (i = 0; i < options->file_count; i++) {
-		if (stream_add(stream, PIECE_FILE, options->files[i]) < 0) {
+		if (stream_add(stream, lang->is_bundle ? PIECE_FILE : PIECE_INCLUDE,
+			options->files[i]) < 0) {
 			return -1;
 		}
 	}
