@@ -127,7 +127,8 @@ await_line "back-from-browse" "answer from the shell after browse"
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window
-# and back to the first, the first renamed with C-b , an answer copied
+# and back to the first, the first renamed with C-b , the left pane picked
+# with C-b Left and zoomed with C-b z and back, an answer copied
 # in copy mode (emacs's keys: no EDITOR names vi) and C-b ] pasting it
 # into a sum whose answer only the paste makes, and ls counting both,
 # then kill-server so no server outlives the test.  A window is named
@@ -168,6 +169,12 @@ send "\002,"
 await {\(rename-window\) } "C-b ,'s prompt"
 send "\025work\r"
 await {\x1b\[4m0:work\*} "the first window renamed"
+send "\002\033\[D"
+send "\002z"
+await {\x1b\[4m0:work\*Z} "the window zoomed"
+await "in-a-pane-42" "the left pane, picked by C-b Left, over the window"
+send "\002z"
+await {\x1b\[4m0:work\*\x1b\[24m} "the window unzoomed"
 send "echo \$((20+1))\r"
 await {\x1b\[0m21 } "the answer to copy"
 await $pane_prompt "the prompt after it"
