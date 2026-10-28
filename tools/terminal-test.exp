@@ -128,7 +128,8 @@ await_line "back-from-browse" "answer from the shell after browse"
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window
 # and back to the first, the first renamed with C-b , the left pane picked
-# with C-b Left and zoomed with C-b z and back, an answer copied
+# with C-b Left and zoomed with C-b z and back, the panes' numbers shown
+# with C-b q and 0 picking the left pane again, an answer copied
 # in copy mode (emacs's keys: no EDITOR names vi) and C-b ] pasting it
 # into a sum whose answer only the paste makes, and ls counting both,
 # then kill-server so no server outlives the test.  A window is named
@@ -175,6 +176,9 @@ await {\x1b\[4m0:work\*Z} "the window zoomed"
 await "in-a-pane-42" "the left pane, picked by C-b Left, over the window"
 send "\002z"
 await {\x1b\[4m0:work\*\x1b\[24m} "the window unzoomed"
+send "\002q"
+await {\x1b\[0;31m[0-9]+x[0-9]+} "the active pane's size, shown red by C-b q"
+send "0"
 send "echo \$((20+1))\r"
 await {\x1b\[0m21 } "the answer to copy"
 await $pane_prompt "the prompt after it"
