@@ -49,6 +49,8 @@ script() {
 		'tmux vt dump /tmp/screen.txt | head -2 | sed -e s/^/tmux-row-/ -e "s/  *|$/|/"' \
 		"printf '# Hi\\n\\nA [link](b.md).\\n' > /tmp/page.md" \
 		'browse -dump /tmp/page.md | head -3 | sed -e s/^/browse-/' \
+		"printf '<h1>Html</h1><p>An <a href=b.html>anchor</a>.</p>\\n' > /tmp/page.html" \
+		'browse -dump /tmp/page.html | head -3 | sed -e s/^/browse-/' \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
@@ -103,6 +105,8 @@ WELCOME TO ZORK
 ^tmux-row-two|$
 ^browse-Hi$
 ^browse-A \[1\]link\.$
+^browse-Html$
+^browse-An \[1\]anchor\.$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
