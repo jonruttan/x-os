@@ -23,7 +23,7 @@
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "ad3f5f93089e90807b5bc07a7587d94e9312ea39") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "44bb80b3855caa1d11781444048a03b005a1482a") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "69ce61fa8adccfcdea6daee9bbeab2bcc2d393e1") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "7b7d4c4165463b1d1d1729c8da83678f95582cf5") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "4836e9130d5ca7211f3190ffed7409fdada5bd10") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "dffe871a3a00cd7a0f907144e4d938cadad9f0f7") ; main
 
 (track x-lang      release)
