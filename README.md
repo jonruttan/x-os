@@ -147,7 +147,8 @@ the host's. The build needs Docker, the container test needs `expect`, and
 the boot tests need QEMU and, for the ISO image, its UEFI firmware.
 
 The builder is Alpine with a C compiler, a shell and make. None of it reaches
-the image.
+the image. The C compiler builds the engine; the launcher is built by the
+image's own `cc`, x-cc.
 
 ## Pins
 
