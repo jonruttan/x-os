@@ -43,8 +43,11 @@ COPY init /src/init
 COPY commands.xon /src/commands.xon
 RUN sh /src/tools/build.sh streams /src/commands.xon /src/init
 
+# The launcher is compiled by the image's own cc, x-cc, run through the
+# wrapper since there is no launcher yet to start it.  x-cc writes a dynamic
+# executable against the loader that started x, which the root carries.
 COPY launch /src/launch
-RUN cc -Os -static -s -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/x.c
+RUN x -l cc -- -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/x.c
 
 COPY etc /src/etc
 RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
