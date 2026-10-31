@@ -12,16 +12,16 @@
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "5c382a0fd466ab6688dabd58a0506df5d7aa95d9") ; v0.43.0
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "09baef099371503a0347773a9838ab060dfe9652") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "3e3488e0cc4cb5ad78505bcf114fc1157cb4b1aa") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "748302345516e9b66fde371f7627041c65ea96e0") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "34293a6c86261017d90db11c29118c961b237385") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "24e227a20e101301bfd1007a7ac7af1ab93885c7") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "1f689b51bd9ebd0d7af050faa006397835f0d9c7") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "76d11fe076c334bc4d0b1c91672ac001ff4efe80") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "5051eff84702a5d6db833e17ea1ff92ca677763c") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "05f92c718c1d5c25e9e42b198324954e975cd9ac") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "a53756c6be43f3365bc22ee2cb57bf700ad109a8") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "100a0d064fa69cf017e611d6777f760f6e96ab9f") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "ad3f5f93089e90807b5bc07a7587d94e9312ea39") ; main
-(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "d5b49f8109e6874f645263cfe71d703bf2ff59e1") ; main
+(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "7841cee8704155808895120f1c47a9afac1cc29d") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "40be4be1f978ccc995d13fb649eb20bc0be54d6a") ; main
 (source x-tmux      "https://github.com/jonruttan/x-tmux.git" "64a4a89bdcf1d3d4e19c86a821916a7995cc132c") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "64a0551cf39a3f3c72da27ea6c75378822ff9f9d") ; main
