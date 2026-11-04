@@ -111,6 +111,21 @@ await $shell_prompt "shell prompt after vi"
 send "cat /tmp/note.txt\r"
 await_line "written-in-vi" "the file vi wrote"
 
+# vi's syntax option with a bundle's grammar: :set sy draws a shell script
+# in the colours of x-ash's sh grammar, found by the file's suffix, its if a
+# keyword in the default theme's bold magenta.
+await $shell_prompt "shell prompt before vi's syntax"
+send "printf 'if true; then echo hi; fi\\n' > /tmp/colour.sh\r"
+await $shell_prompt "shell prompt after the script is written"
+send "vi /tmp/colour.sh\r"
+await $vi_empty_line "screen from vi on the script"
+send ":set sy\r"
+await {\x1b\[1;35mif\x1b\[0m} "if drawn as a keyword by the sh grammar"
+send ":q\r"
+await $shell_prompt "shell prompt after vi's syntax"
+send "echo back-from-vi\r"
+await_line "back-from-vi" "answer from the shell after vi's syntax"
+
 # browse: a page in the browser, its heading drawn, and q back to the
 # shell.  The heading is spelled out by printf so that the command's echo
 # is not what matches.
