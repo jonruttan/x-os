@@ -126,6 +126,20 @@ await $shell_prompt "shell prompt after vi's syntax"
 send "echo back-from-vi\r"
 await_line "back-from-vi" "answer from the shell after vi's syntax"
 
+# The same with x-make's grammar, found by the name Makefile: its ifdef a
+# directive, drawn as a keyword.
+await $shell_prompt "shell prompt before vi on a Makefile"
+send "printf 'ifdef DEBUG\\nendif\\n' > /tmp/Makefile\r"
+await $shell_prompt "shell prompt after the Makefile is written"
+send "vi /tmp/Makefile\r"
+await $vi_empty_line "screen from vi on the Makefile"
+send ":set sy\r"
+await {\x1b\[1;35mifdef\x1b\[0m} "ifdef drawn as a keyword by the make grammar"
+send ":q\r"
+await $shell_prompt "shell prompt after vi on the Makefile"
+send "echo back-from-make-vi\r"
+await_line "back-from-make-vi" "answer from the shell after vi on the Makefile"
+
 # browse: a page in the browser, its heading drawn, and q back to the
 # shell.  The heading is spelled out by printf so that the command's echo
 # is not what matches.
