@@ -1,0 +1,30 @@
+name: probe
+on:
+  pull_request:
+jobs:
+  arm-v7:
+    name: can the arm runner run linux/arm/v7
+    runs-on: ubuntu-24.04-arm
+    timeout-minutes: 10
+    steps:
+      - name: CPU and kernel
+        run: |
+          uname -a
+          grep -m1 -i 'model name\|CPU part\|implementer' /proc/cpuinfo || true
+          grep -o 'CONFIG_COMPAT=.' /boot/config-"$(uname -r)" || true
+          ls /proc/sys/fs/binfmt_misc/ || true
+      - name: Run a 32-bit container without QEMU
+        run: |
+          docker run --rm --platform linux/arm/v7 alpine:3.20 sh -c 'uname -m; getconf LONG_BIT' \
+            && echo "NATIVE_ARM32=yes" || echo "NATIVE_ARM32=no"
+      - uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm
+      - name: Run a 32-bit container with QEMU
+        run: |
+          ls /proc/sys/fs/binfmt_misc/
+          time docker run --rm --platform linux/arm/v7 alpine:3.20 sh -c 'uname -m; getconf LONG_BIT'
+      - name: Build speed under whichever ran
+        run: |
+          time docker run --rm --platform linux/arm/v7 alpine:3.20 sh -c \
+            'apk add --no-cache build-base > /dev/null && printf "int main(void){volatile long i=0; while(i<200000000) i++; return 0;}" > t.c && cc -O0 -o t t.c && time ./t'
