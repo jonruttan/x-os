@@ -7,15 +7,16 @@
 #   make iso              build the bootable ISO image for ARCH
 #   make test             both, and both tests
 #
-# ARCH is amd64 or arm64 and defaults to the host's.
+# ARCH is amd64, arm64 or armv7 and defaults to the host's.
 # CONTAINER is the container command, docker unless it is set: podman runs
 # the same builds and tests.
 
-ARCH ?= $(if $(filter arm64 aarch64,$(shell uname -m)),arm64,amd64)
+ARCH ?= $(if $(filter armv7l armv8l,$(shell uname -m)),armv7,$(if $(filter arm64 aarch64,$(shell uname -m)),arm64,amd64))
 CONTAINER ?= docker
 export CONTAINER
 IMAGE ?= x-os
-PLATFORM = linux/$(ARCH)
+# The platform's name in a manifest: 32-bit arm is linux/arm with a variant.
+PLATFORM = $(if $(filter armv7,$(ARCH)),linux/arm/v7,linux/$(ARCH))
 BOOT_DIR = build/boot-$(ARCH)
 ISO_DIR = build/iso-$(ARCH)
 ISO = $(ISO_DIR)/x-os-$(ARCH).iso

@@ -6,6 +6,7 @@
 #   sh build.sh image-langs SOURCES       write every installed lang's image
 #   sh build.sh image-dialects DIALECT... write each dialect's image
 #   sh build.sh streams COMMANDS INIT     write the boot streams
+#   sh build.sh launcher OUT SOURCE...    compile the launcher to OUT
 #   sh build.sh root ROOT COMMANDS ETC    assemble the image's root
 #   sh build.sh warm ROOT                 fill ROOT's code cache
 #
@@ -113,6 +114,21 @@ write_streams() {
 	done
 }
 
+# The launcher, compiled by x-cc where x-cc has an executable format for
+# this machine (-dumpmachine names it) and by the builder's cc where it has
+# none, which is what 32-bit arm is until x-cc writes it.
+build_launcher() {
+	out="$1"
+	shift
+	if machine=$(x -l cc -- -dumpmachine) && [ -n "$machine" ]; then
+		echo "build: x-cc compiles the launcher for $machine"
+		x -l cc -- -o "$out" "$@"
+	else
+		echo "build: x-cc has no executable format for this machine; cc compiles the launcher"
+		cc -o "$out" "$@"
+	fi
+}
+
 # Link a command to the launcher, among the commands: link_command ROOT NAME
 link_command() {
 	ln -s "$launcher" "$1/usr/bin/$2"
@@ -195,6 +211,9 @@ case "$step" in
 		;;
 	streams)
 		write_streams "$@"
+		;;
+	launcher)
+		build_launcher "$@"
 		;;
 	root)
 		assemble_root "$@"

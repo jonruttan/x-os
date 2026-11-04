@@ -81,7 +81,7 @@ script() {
 
 # A line of the output each must match, in any order.
 expected='^shell-ok$
-^\(x86_64\|aarch64\)$
+^\(x86_64\|aarch64\|armv7l\|armv8l\)$
 ^3$
 ^root:x:0:0:
 ^-rwxr-xr-x .* x-bin$
