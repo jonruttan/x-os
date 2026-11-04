@@ -78,6 +78,16 @@ await "\n#t\r" "x-tmux's compiled screen"
 await {\x1b\[Ktmux> } "prompt from x-tmux after its engine"
 send "\004"
 await {\x1b\[K# } "shell prompt after x-tmux"
+# Python's first prompt at a terminal makes the lexer its editor paints
+# and matches brackets with, which no state image can hold: uncompiled,
+# that prompt never drew in a container of 4 GB.
+send "python\r"
+await {\x1b\[K>>> } "prompt from python"
+send "1+1\r"
+await "\n2\r" "answer from python"
+await {\x1b\[K>>> } "prompt from python after its answer"
+send "\004"
+await {\x1b\[K# } "shell prompt after python"
 send "exit\r"
 expect eof
-puts "\nwarm: the shell and x drew their prompts"
+puts "\nwarm: the shell, x, x-tmux and python drew their prompts"
