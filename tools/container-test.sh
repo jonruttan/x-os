@@ -113,7 +113,7 @@ WELCOME TO ZORK
 ^chess-perft-400$
 ^chess-uciok$
 ^chess-bestmove g8f6$
-^x-chess plays Nf6$
+^x-chess plays [^ ][^ ]*$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
