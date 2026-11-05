@@ -66,18 +66,33 @@ install_langs() {
 
 # A lang that writes no image would boot from source, which the image has no
 # wrapper to do, so that is an error.
+#
+# Every lang is tried before the step fails, and a failed write's log is
+# printed here: the file it names is inside a build layer that is thrown
+# away, so this output is the only place its words can be read.
 image_langs() {
+	failed=""
 	for dir in "$1"/*/; do
 		if [ ! -f "$dir/lang.xon" ]; then
 			continue
 		fi
 		name=$(lang_name "$dir")
 		clear_code_cache
-		x --image -l "$name"
+		x --image -l "$name" || true
 		if [ ! -f "$share/langs/$name/.images/$name.boot.x.ximg" ]; then
-			fail 1 "no state image for $name"
+			echo "build: no state image for $name" >&2
+			for log in "$share/langs/$name/.images"/*.log; do
+				if [ -f "$log" ]; then
+					echo "build: --- $log" >&2
+					cat "$log" >&2
+				fi
+			done
+			failed="$failed $name"
 		fi
 	done
+	if [ -n "$failed" ]; then
+		fail 1 "no state image for$failed"
+	fi
 }
 
 # The wrapper writes a dialect's image to its cache, in a directory named for
