@@ -56,7 +56,7 @@ script() {
 		"printf 'e4\\n' | chess --depth 1 | grep plays | sed -e 's/  (.*//'" \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
-		'roguelike -version | sed -e s/^/roguelike-/' \
+		'roguelike --version | sed -e s/^/roguelike-/' \
 		'roguelike scores | sed -e s/^/roguelike-/' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
