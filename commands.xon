@@ -33,3 +33,4 @@
 (command git-receive-pack git "git.x")
 (command tmux             tmux "tmux.x")
 (command browse           browse "browse.x")
+(command chess            chess "chess.x")

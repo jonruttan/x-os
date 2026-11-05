@@ -163,6 +163,18 @@ await $shell_prompt "shell prompt after browse"
 send "echo back-from-browse\r"
 await_line "back-from-browse" "answer from the shell after browse"
 
+# chess: a game at the terminal, a move and the engine's reply, and quit
+# back to the shell.
+await $shell_prompt "shell prompt before chess"
+send "chess --depth 1\r"
+await "White to move" "the board and whose move it is in chess"
+send "e4\r"
+await "x-chess plays Nf6" "the engine's reply in chess"
+send "quit\r"
+await $shell_prompt "shell prompt after chess"
+send "echo back-from-chess\r"
+await_line "back-from-chess" "answer from the shell after chess"
+
 # tmux: a session's status line, a command in its pane, a split and a
 # command in the new pane, C-b d back to the shell with the server still
 # running, ls and attach to it, copy mode and out of it, a second window

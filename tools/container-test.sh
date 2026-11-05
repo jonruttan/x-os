@@ -51,6 +51,9 @@ script() {
 		'browse -dump /tmp/page.md | head -3 | sed -e s/^/browse-/' \
 		"printf '<h1>Html</h1><p>An <a href=b.html>anchor</a>.</p>\\n' > /tmp/page.html" \
 		'browse -dump /tmp/page.html | head -3 | sed -e s/^/browse-/' \
+		'chess --perft 2 | sed -e s/^/chess-perft-/' \
+		"printf 'uci\\nposition startpos moves e2e4\\ngo depth 1\\n' | chess | grep -e uciok -e bestmove | sed -e s/^/chess-/" \
+		"printf 'e4\\n' | chess --depth 1 | grep plays | sed -e 's/  (.*//'" \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
@@ -107,6 +110,10 @@ WELCOME TO ZORK
 ^browse-A \[1\]link\.$
 ^browse-Html$
 ^browse-An \[1\]anchor\.$
+^chess-perft-400$
+^chess-uciok$
+^chess-bestmove g8f6$
+^x-chess plays Nf6$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
@@ -143,4 +150,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux and browse"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse and chess"
