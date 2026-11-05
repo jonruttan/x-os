@@ -76,6 +76,7 @@ launcher, which is also the `x` command, and the engine.
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): numbered windows of panes, each a shell, named after its program; C-b `%` and `"` split, `o`, `;` and the arrows switch, `q` numbers the panes, `z` zooms, C-arrows and M-arrows resize, `{` `}` swap, C-o and M-o rotate, M-1 to M-7 and Space lay out, `x` kills, `c` makes a window, `n` `p` `l` `0`-`9` show one, `&` kills one, `,` renames one, `:` runs tmux's commands, `bind`, `set` and `source-file` read from `~/.tmux.conf` or `-f FILE`, `d` detaches, `[` scrolls back, selects and copies, `]` pastes; `tmux attach`, `ls` and `kill-server` reach the server |
 | `browse` | [x-browse](https://github.com/jonruttan/x-browse): a terminal browser for Markdown, local or over http(s), with tabs and history; `browse -dump` writes a page out with its references |
 | `chess` | [x-chess](https://github.com/jonruttan/x-chess): a chess engine; on a terminal a game against it, in SAN or long algebraic, with `help` for the commands; fed lines that start with `uci`, the Universal Chess Interface |
+| `roguelike` | [x-roguelike](https://github.com/jonruttan/x-roguelike): a dungeon crawl of rooms, creatures, things to work out and one life, its content read from a set of `.xon` files; `?` lists the keys, `S` saves, `roguelike scores` lists the best games |
 | `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
@@ -89,7 +90,8 @@ x-git's three start at `init/git.x`; `tmux` starts at `init/tmux.x`, which
 opens a session with no arguments, as tmux does, where x-tmux's own entry
 starts a REPL; `browse` starts at `init/browse.x`, which browses the current
 directory with no arguments; `chess` starts at `init/chess.x`, which starts
-a game with no arguments. A
+a game with no arguments; `roguelike` starts at `init/roguelike.x`, which
+plays with no arguments. A
 command started at an entry of this repository's finds its own name in
 `%command`, which picks x-ssh's program or x-git's service.
 

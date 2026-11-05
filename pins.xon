@@ -26,6 +26,7 @@
 (source x-tmux      "https://github.com/jonruttan/x-tmux.git" "a83488eeb3df6172d19e2d50d26047223f3bca92") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "309778c8a3206e90620dfab88961c0b1cd0f5016") ; main
 (source x-chess     "https://github.com/jonruttan/x-chess.git" "d5d4a545d2f44e3d42e419a00ea3ed481ab8b3c9") ; main
+(source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "c832aaedf405c1497b3687aa6020a4dd3b5cc719") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -43,3 +44,4 @@
 (track x-tmux      main)
 (track x-browse    main)
 (track x-chess     main)
+(track x-roguelike main)
