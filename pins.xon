@@ -18,7 +18,7 @@
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "547152f8378160864543652b8b68aa905b4c1673") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "c99de3036ee9a8fe28b9bad299b4d00df7e1949d") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "3db95ca2643cb16bd06d68bb5521db42526c7118") ; main
-(source x-logo      "https://github.com/jonruttan/x-logo.git" "9677821b8ba4148c431e2ee311339f1147b53d39") ; main
+(source x-logo      "https://github.com/jonruttan/x-logo.git" "602aa27002edddf1cf3c80a1da04fab8f3207bb7") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "cb78b510b50714ff3aaef9337407f06d8c9f0a15") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "8ac3f91e1799c66e6a6a775dafa82980320de3f7") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "436974b1966d1d9367aa8d5fdd181dd452f382bc") ; main

@@ -32,6 +32,16 @@ set vi_empty_line {\x1b\[[0-9]+;1H~}
 # A prompt in a tmux pane, as x-tmux redraws the row: the cursor put at
 # the pane's left edge, the attributes reset, then the prompt.
 set pane_prompt {\x1b\[[0-9]+;[0-9]+H\x1b\[0m# }
+# tmux's status line: the shown window starts with attributes that include
+# underscore (4), and the next attributes end it.  The status line's colours
+# are in both, so neither is matched exactly.
+set shown_on {\x1b\[(?:[0-9]+;)*4(?:;[0-9]+)*m}
+set attrs {\x1b\[[0-9;]*m}
+
+# A status line pattern from its pieces: status PIECE...
+proc status {args} {
+	return [join $args ""]
+}
 
 proc fail {what} {
 	puts stderr "\nterminal-test: $what"
@@ -165,7 +175,7 @@ await_line "back-from-browse" "answer from the shell after browse"
 # after its program, so a name matches whatever it is.
 await $shell_prompt "shell prompt before tmux"
 send "tmux\r"
-await {\[0\] \x1b\[4m0:[^ \x1b]*\*} "tmux's status line"
+await [status {\[0\] } $shown_on {0:[^ \x1b]*\*}] "tmux's status line"
 await $pane_prompt "the first pane's prompt"
 send "echo in-a-pane-\$((6*7))\r"
 await "in-a-pane-42" "answer in the first pane"
@@ -190,31 +200,31 @@ await {\[0/[0-9]+\]} "copy mode's position"
 send "q"
 sleep 1
 send "\002c"
-await {0:[^ \x1b]*- \x1b\[4m1:[^ \x1b]*\*} "a second window on the status line"
+await [status {0:[^ \x1b]*- } $shown_on {1:[^ \x1b]*\*}] "a second window on the status line"
 await $pane_prompt "the second window's prompt"
 send "\0020"
-await {\x1b\[4m0:[^ \x1b]*\*\x1b\[24m 1:[^ \x1b]*-} "the first window shown again"
+await [status $shown_on {0:[^ \x1b]*\*} $attrs { 1:[^ \x1b]*-}] "the first window shown again"
 await "right-pane-42" "the first window's panes"
 send "\002,"
 await {\(rename-window\) } "C-b ,'s prompt"
 send "\025work\r"
-await {\x1b\[4m0:work\*} "the first window renamed"
+await [status $shown_on {0:work\*}] "the first window renamed"
 send "\002\033\[D"
 send "\002z"
-await {\x1b\[4m0:work\*Z} "the window zoomed"
+await [status $shown_on {0:work\*Z}] "the window zoomed"
 await "in-a-pane-42" "the left pane, picked by C-b Left, over the window"
 send "\002z"
-await {\x1b\[4m0:work\*\x1b\[24m} "the window unzoomed"
+await [status $shown_on {0:work\*} $attrs] "the window unzoomed"
 send "\002q"
 await {\x1b\[0;31m[0-9]+x[0-9]+} "the active pane's size, shown red by C-b q"
 send "0"
 send "\002:"
 send "renamew cmd\r"
-await {\x1b\[4m0:cmd\*} "the window renamed by C-b :'s command"
+await [status $shown_on {0:cmd\*}] "the window renamed by C-b :'s command"
 send "\002:"
 send "bind -n M-z renamew zed\r"
 send "\033z"
-await {\x1b\[4m0:zed\*} "the window renamed by a key bound with bind -n"
+await [status $shown_on {0:zed\*}] "the window renamed by a key bound with bind -n"
 send "echo \$((20+1))\r"
 await {\x1b\[0m21 } "the answer to copy"
 await $pane_prompt "the prompt after it"
