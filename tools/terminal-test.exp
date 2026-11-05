@@ -163,15 +163,19 @@ await $shell_prompt "shell prompt after browse"
 send "echo back-from-browse\r"
 await_line "back-from-browse" "answer from the shell after browse"
 
-# chess: a game at the terminal, a move and the engine's reply, and quit
-# back to the shell.
+# chess: the board on the terminal, a move and the engine's reply (any:
+# the opening book picks it), and q back to the shell.  The board needs
+# 52 by 14 at least, so the terminal is 100 by 30 while it runs.
 await $shell_prompt "shell prompt before chess"
+set tty_size [exec stty size < $spawn_out(slave,name)]
+exec stty rows 30 columns 100 < $spawn_out(slave,name)
 send "chess --depth 1\r"
-await "White to move" "the board and whose move it is in chess"
+await "type or click a move" "the board in chess"
 send "e4\r"
-await "x-chess plays Nf6" "the engine's reply in chess"
-send "quit\r"
+await "x-chess plays " "the engine's reply in chess"
+send "q"
 await $shell_prompt "shell prompt after chess"
+exec stty rows [lindex $tty_size 0] columns [lindex $tty_size 1] < $spawn_out(slave,name)
 send "echo back-from-chess\r"
 await_line "back-from-chess" "answer from the shell after chess"
 
