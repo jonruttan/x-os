@@ -165,9 +165,14 @@ await_line "back-from-browse" "answer from the shell after browse"
 
 # chess: the board on the terminal, a move and the engine's reply (any:
 # the opening book picks it), and q back to the shell.  The board needs
-# 52 by 14 at least, so the terminal is 100 by 30 while it runs.
+# 52 by 14 at least, so the terminal is 100 by 30 while it runs.  A
+# terminal with no size (0 by 0) is the container's 24 by 80 after: the
+# container keeps a size once one is sent, and 0 by 0 is none for tmux.
 await $shell_prompt "shell prompt before chess"
 set tty_size [exec stty size < $spawn_out(slave,name)]
+if {[lindex $tty_size 0] == 0} {
+	set tty_size {24 80}
+}
 exec stty rows 30 columns 100 < $spawn_out(slave,name)
 send "chess --depth 1\r"
 await "type or click a move" "the board in chess"
