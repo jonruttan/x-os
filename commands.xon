@@ -34,3 +34,4 @@
 (command tmux             tmux "tmux.x")
 (command browse           browse "browse.x")
 (command chess            chess "chess.x")
+(command roguelike        roguelike "roguelike.x")
