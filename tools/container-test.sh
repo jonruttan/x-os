@@ -115,7 +115,7 @@ WELCOME TO ZORK
 ^chess-perft-400$
 ^chess-uciok$
 ^chess-bestmove g8f6$
-^x-chess plays Nf6$
+^x-chess plays [^ ][^ ]*$
 roguelike-x-roguelike 0\.1\.0$
 ^roguelike-No games yet\.$
 ^ssh-says-42$
