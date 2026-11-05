@@ -17,7 +17,7 @@
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "2f0d1df030f48f3e970aeec0c7113b4a4eca8c95") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "d335336e9357813ffc41cfe0f33ec672cb6a3e33") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "0fa08e77970edfb186adae2ddae3df6aa5c10c2b") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "27cb5d79e4e934402d71d3a6aabe227ac7f3d380") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "bf57948448b2fddfc2c94ef9631f313e47df1595") ; fix/chunk-bound-by-word, past main until x-python#230 merges
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "602aa27002edddf1cf3c80a1da04fab8f3207bb7") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "4e429e53f89008beb869280d90e1b22c711e2881") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "7c1b3ae727c224b734c5b67bb650064fe75fa98b") ; main
