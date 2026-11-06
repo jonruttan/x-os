@@ -60,8 +60,23 @@ send "(import x/codec/mont-jit mont-jit-ready!)\r"
 await {\x1b\[K> } "prompt from x after importing mont-jit"
 # A 4-byte word builds the base64 decoder alone: the other engines are
 # written for an 8-byte word and keep their pure-x path there, so jit!
-# answers #f, which is the engine's report and not a failure.
-if {[string match "arm*" [exec uname -m]]} {
+# answers #f, which is the engine's report and not a failure.  x says
+# which machine it is: a 32-bit container on a 64-bit kernel has uname
+# answer for the kernel.
+send "(write arch-arm?)\r"
+expect {
+	-re "\n(#t|#f)\r" {
+		set arm $expect_out(1,string)
+	}
+	timeout {
+		fail "no answer to arch-arm?"
+	}
+	eof {
+		fail "the session ended waiting for arch-arm?"
+	}
+}
+await {\x1b\[K> } "prompt from x after arch-arm?"
+if {$arm eq "#t"} {
 	set three "\\(#f #f #f\\)"
 	set six "\\(#f #f #t\\)"
 	set mont "#f"
