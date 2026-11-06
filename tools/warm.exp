@@ -58,9 +58,10 @@ foreach module {x/net/tls13 x/codec/x25519 x/codec/sha256 x/codec/sha512 x/codec
 }
 send "(import x/codec/mont-jit mont-jit-ready!)\r"
 await {\x1b\[K> } "prompt from x after importing mont-jit"
-# A 4-byte word builds the base64 decoder alone: the other engines are
-# written for an 8-byte word and keep their pure-x path there, so jit!
-# answers #f, which is the engine's report and not a failure.  x says
+# A 4-byte word builds the base64 decoder and the Montgomery runner: the
+# other engines are written for an 8-byte word and keep their pure-x path
+# there, so jit! answers #f, which is the engine's report and not a
+# failure.  x says
 # which machine it is: a 32-bit container on a 64-bit kernel has uname
 # answer for the kernel.
 send "(write arch-arm?)\r"
@@ -79,11 +80,9 @@ await {\x1b\[K> } "prompt from x after arch-arm?"
 if {$arm eq "#t"} {
 	set three "\\(#f #f #f\\)"
 	set six "\\(#f #f #t\\)"
-	set mont "#f"
 } else {
 	set three "\\(#t #t #t\\)"
 	set six "\\(#t #t #t\\)"
-	set mont "#t"
 }
 send "(write (list (X25519 jit!) (Sha256 jit!) (ChaCha20 jit!)))\r"
 await "\n$three\r" "the X25519, SHA-256 and ChaCha20 engines"
@@ -92,7 +91,7 @@ send "(write (list (Poly1305 jit!) (Sha512 jit!) (Base64 jit!)))\r"
 await "\n$six\r" "the Poly1305, SHA-512 and base64 engines"
 await {\x1b\[K> } "prompt from x after six engines"
 send "(write (mont-jit-ready!))\r"
-await "\n$mont\r" "the Montgomery runner"
+await "\n#t\r" "the Montgomery runner"
 await {\x1b\[K> } "prompt from x after the engines"
 send "\004"
 await {\x1b\[K# } "shell prompt after x"
