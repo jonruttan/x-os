@@ -187,7 +187,7 @@ await_line "back-from-chess" "answer from the shell after chess"
 # roguelike: a game at the terminal, its standing drawn, Q asked and
 # answered, the final screen dismissed, and the shell back.
 await $shell_prompt "shell prompt before roguelike"
-send "roguelike -seed 3\r"
+send "roguelike --seed 3\r"
 await "Level:1" "the standing row in roguelike"
 send "Q"
 await "Really quit?" "the question in roguelike"

@@ -48,15 +48,15 @@ script() {
 		"printf 'one\\r\\ntwo\\033[1;2HX' > /tmp/screen.txt" \
 		'tmux vt dump /tmp/screen.txt | head -2 | sed -e s/^/tmux-row-/ -e "s/  *|$/|/"' \
 		"printf '# Hi\\n\\nA [link](b.md).\\n' > /tmp/page.md" \
-		'browse -dump /tmp/page.md | head -3 | sed -e s/^/browse-/' \
+		'browse --dump /tmp/page.md | head -3 | sed -e s/^/browse-/' \
 		"printf '<h1>Html</h1><p>An <a href=b.html>anchor</a>.</p>\\n' > /tmp/page.html" \
-		'browse -dump /tmp/page.html | head -3 | sed -e s/^/browse-/' \
+		'browse --dump /tmp/page.html | head -3 | sed -e s/^/browse-/' \
 		'chess --perft 2 | sed -e s/^/chess-perft-/' \
 		"printf 'uci\\nposition startpos moves e2e4\\ngo depth 1\\n' | chess | grep -e uciok -e bestmove | sed -e s/^/chess-/" \
 		"printf 'e4\\n' | chess --depth 1 | grep plays | sed -e 's/  (.*//'" \
 		"printf 'open mailbox\\nread leaflet\\n' | infocom /usr/share/infocom/zork1.z3" \
 		'export HOME=/root' \
-		'roguelike -version | sed -e s/^/roguelike-/' \
+		'roguelike --version | sed -e s/^/roguelike-/' \
 		'roguelike scores | sed -e s/^/roguelike-/' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
