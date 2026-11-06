@@ -12,7 +12,7 @@
 
 (source x-lang      "https://github.com/jonruttan/x-lang.git"      "abf9e7fcf47641fb6c453bd6a4c849acdedaf40e") ; v0.47.0
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "9c11bdd086fcb86b8ef6cbbad2e38010df8a92b7") ; main
-(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "f534dddfe650b2a5073f19835be8ca62db1bba24") ; main
+(source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "4a0e3dc73edd9a984b0ba4316b41f895fb8ef9f9") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "c5f16e27e83b355f52f82dd323c9b2ed210e6b34") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "2f0d1df030f48f3e970aeec0c7113b4a4eca8c95") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "d335336e9357813ffc41cfe0f33ec672cb6a3e33") ; main
@@ -23,10 +23,10 @@
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "7c1b3ae727c224b734c5b67bb650064fe75fa98b") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "3cb8425e37f9f8fc11c9e8b4a80c763ba36a4030") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "5e50c099ced1ec6599384cb97c5d7637fc99630e") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "b0ac17c2c627f5499853093d62f39dc3aa4e733e") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "050a6061d8b1cdcb0d030ab54db397e493fb9ae8") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "1850f3aa77651143d5ef8e1f160701787a8000a3") ; main
-(source x-chess     "https://github.com/jonruttan/x-chess.git" "3d4d1356dceb9321c6b93fb1e9abb0f0e5392719") ; main
-(source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "e2d91b3e0ff3d30dccf18d695c73254d76da2974") ; main
+(source x-chess     "https://github.com/jonruttan/x-chess.git" "df7b28e1d254e93a467fdb005d29bf32580d338e") ; main
+(source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "a335ff7ce655aaa84e9f866d4f8257d8bd86c212") ; main
 
 (track x-lang      release)
 (track x-ash       main)
