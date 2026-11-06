@@ -10,13 +10,13 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "54b5fef24c29aea9a13de52979826e2a19f2c33a") ; feat/linux-arm, past v0.47.0 until the release that carries it
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "753bfedf6929df654333a0d7679bbd3fda5bfe2a") ; feat/linux-arm, past v0.47.0 until the release that carries it
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "9c11bdd086fcb86b8ef6cbbad2e38010df8a92b7") ; main
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "4a0e3dc73edd9a984b0ba4316b41f895fb8ef9f9") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "c5f16e27e83b355f52f82dd323c9b2ed210e6b34") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "2f0d1df030f48f3e970aeec0c7113b4a4eca8c95") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "d335336e9357813ffc41cfe0f33ec672cb6a3e33") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "0fa08e77970edfb186adae2ddae3df6aa5c10c2b") ; main
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "c29da240dbd6d865a56188587a4abfab80558b6a") ; fix/four-byte-word, past main until x-cc#129 merges
 (source x-python    "https://github.com/jonruttan/x-python.git" "360f066196497c55459562f24ac748f95db3618c") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "602aa27002edddf1cf3c80a1da04fab8f3207bb7") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "4e429e53f89008beb869280d90e1b22c711e2881") ; main
