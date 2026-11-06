@@ -10,7 +10,7 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "4b9d366f4b7e5304f425337c3504434175d9cb57") ; feat/linux-arm, past v0.47.0 until the release that carries it
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "54b5fef24c29aea9a13de52979826e2a19f2c33a") ; feat/linux-arm, past v0.47.0 until the release that carries it
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "9c11bdd086fcb86b8ef6cbbad2e38010df8a92b7") ; main
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "f534dddfe650b2a5073f19835be8ca62db1bba24") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "c5f16e27e83b355f52f82dd323c9b2ed210e6b34") ; main
@@ -23,7 +23,7 @@
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "7c1b3ae727c224b734c5b67bb650064fe75fa98b") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "3cb8425e37f9f8fc11c9e8b4a80c763ba36a4030") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "5e50c099ced1ec6599384cb97c5d7637fc99630e") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "b0ac17c2c627f5499853093d62f39dc3aa4e733e") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "c4d2083fc4abe5be5bdd06055a0ba0f0a7b807d0") ; fix/vt-jit-word, past main until x-tmux#27 merges
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "1850f3aa77651143d5ef8e1f160701787a8000a3") ; main
 (source x-chess     "https://github.com/jonruttan/x-chess.git" "ce8217e65eff6e28bfb847a41d049701f2f0bc5b") ; main
 (source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "e2d91b3e0ff3d30dccf18d695c73254d76da2974") ; main
