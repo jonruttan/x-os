@@ -150,6 +150,19 @@ await $shell_prompt "shell prompt after vi on the Makefile"
 send "echo back-from-make-vi\r"
 await_line "back-from-make-vi" "answer from the shell after vi on the Makefile"
 
+# And with x-python's grammar, found by the .py suffix: its def a keyword.
+await $shell_prompt "shell prompt before vi on a Python file"
+send "printf 'def f():\\n    return 1\\n' > /tmp/colour.py\r"
+await $shell_prompt "shell prompt after the Python file is written"
+send "vi /tmp/colour.py\r"
+await $vi_empty_line "screen from vi on the Python file"
+send ":set sy\r"
+await {\x1b\[1;35mdef\x1b\[0m} "def drawn as a keyword by the python grammar"
+send ":q\r"
+await $shell_prompt "shell prompt after vi on the Python file"
+send "echo back-from-py-vi\r"
+await_line "back-from-py-vi" "answer from the shell after vi on the Python file"
+
 # browse: a page in the browser, its heading drawn, and q back to the
 # shell.  The heading is spelled out by printf so that the command's echo
 # is not what matches.
