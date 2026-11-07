@@ -8,6 +8,10 @@
 #
 # The container runs under a memory and a process limit: the shell is the
 # image's own, and nothing else bounds what it starts.
+#
+# What the container prints goes to stderr as it comes, each command
+# shown before what it printed, so a run a time limit stops names the
+# command it stopped in.
 set -e
 
 image="$1"
@@ -86,7 +90,7 @@ script() {
 
 # A line of the output each must match, in any order.
 expected='^shell-ok$
-^\(x86_64\|aarch64\)$
+^\(x86_64\|aarch64\|armv7l\|armv8l\)$
 ^3$
 ^root:x:0:0:
 ^-rwxr-xr-x .* x-bin$
@@ -126,11 +130,30 @@ roguelike-x-roguelike 0\.1\.0$
 ^git-over-ssh-git-carried$
  pushed-over-ssh$'
 
-if ! out=$(script | "${CONTAINER:-docker}" run --rm -i --platform "$platform" \
-	--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
-	--pids-limit 256 "$image" 2>&1); then
+work=$(mktemp -d)
+trap 'rm -rf "$work"' EXIT
+script > "$work/steps"
+
+# The shell is given each command after a line that echoes its number;
+# the number comes back as the command's text.
+awk '{ printf "echo \"+ step %d\"\n%s\n", NR, $0 }' "$work/steps" > "$work/in"
+: > "$work/out"
+{
+	status=0
+	"${CONTAINER:-docker}" run --rm -i --platform "$platform" \
+		--memory "${TEST_MEM:-3g}" --memory-swap "${TEST_MEM:-3g}" \
+		--pids-limit 256 "$image" < "$work/in" 2>&1 || status=$?
+	echo "$status" > "$work/status"
+} | while IFS= read -r line; do
+	case $line in
+	"+ step "*) printf '+ %s\n' "$(sed -n "${line#+ step }p" "$work/steps")" >&2 ;;
+	*) printf '%s\n' "$line" >&2; printf '%s\n' "$line" >> "$work/out" ;;
+	esac
+done
+out=$(cat "$work/out")
+
+if [ "$(cat "$work/status")" -ne 0 ]; then
 	echo "container-test: the container failed" >&2
-	printf '%s\n' "$out" >&2
 	exit 1
 fi
 
@@ -151,7 +174,6 @@ if printf '%s\n' "$out" | grep -q -e 'unreadable'; then
 fi
 
 if [ "$failed" -ne 0 ]; then
-	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
 echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, chess and roguelike"

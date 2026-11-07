@@ -80,7 +80,7 @@ await_line "typed-42" "answer to echo"
 
 await $shell_prompt "shell prompt after echo"
 send "uname -m\r"
-await_line "(x86_64|aarch64)" "answer to uname"
+await_line "(x86_64|aarch64|armv7l|armv8l)" "answer to uname"
 
 await $shell_prompt "shell prompt after uname"
 send "x\r"

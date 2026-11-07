@@ -69,6 +69,16 @@ case "$arch" in
 				;;
 		esac
 		;;
+	# Emulated everywhere: an arm64 host's KVM runs a 32-bit guest only on
+	# a CPU that still has the 32-bit kernel mode, and the recent ones do not.
+	armv7)
+		qemu=qemu-system-arm
+		machine="-machine virt"
+		console=ttyAMA0
+		firmware_names="edk2-arm-code.fd AAVMF32_CODE.fd QEMU_EFI.fd"
+		cpu="-cpu cortex-a15"
+		native=
+		;;
 	*)
 		echo "boot-test: unknown arch $arch" >&2
 		exit 2
@@ -97,7 +107,7 @@ find_firmware() {
 	for name in $firmware_names; do
 		for place in /opt/homebrew/share/qemu /usr/local/share/qemu \
 			/usr/share/qemu /usr/share/ovmf /usr/share/OVMF \
-			/usr/share/qemu-efi-aarch64 /usr/share/AAVMF; do
+			/usr/share/qemu-efi-aarch64 /usr/share/AAVMF /usr/share/qemu-efi-arm; do
 			if [ -f "$place/$name" ]; then
 				printf '%s\n' "$place/$name"
 				return
@@ -201,7 +211,7 @@ await_console 'exit or ctrl-d to leave'
 type_line 'echo pid-is-$$'
 await_console '^pid-is-[0-9]'
 type_line 'uname -m'
-await_console '^\(x86_64\|aarch64\)$'
+await_console '^\(x86_64\|aarch64\|armv7l\)$'
 type_line 'cat /proc/version'
 await_console '^Linux version'
 type_line 'exit'

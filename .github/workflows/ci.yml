@@ -33,13 +33,19 @@ jobs:
             os: ubuntu-24.04
           - arch: arm64
             os: ubuntu-24.04-arm
+          # 32-bit arm builds and runs on the arm64 runner: its kernel
+          # executes 32-bit binaries itself, so nothing is emulated.  QEMU's
+          # user emulation is NOT installed here: a registered qemu-arm takes
+          # every 32-bit binary over, and the build then crawls.
+          - arch: armv7
+            os: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v7
       - name: Install QEMU and expect
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
-            qemu-system-x86 qemu-system-arm expect ovmf qemu-efi-aarch64
+            qemu-system-x86 qemu-system-arm expect ovmf qemu-efi-aarch64 qemu-efi-arm
       # The runner's own virtualization, where it has any: the boot test uses
       # /dev/kvm when it can write to it and emulates when it cannot.
       - name: Allow KVM
@@ -88,8 +94,13 @@ jobs:
         include:
           - arch: amd64
             os: ubuntu-24.04
+            platform: linux/amd64
           - arch: arm64
             os: ubuntu-24.04-arm
+            platform: linux/arm64
+          - arch: armv7
+            os: ubuntu-24.04-arm
+            platform: linux/arm/v7
     env:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_TOKEN: ${{ secrets.DOCKERHUB_TOKEN }}
@@ -123,7 +134,7 @@ jobs:
         with:
           context: .
           target: root
-          platforms: linux/${{ matrix.arch }}
+          platforms: ${{ matrix.platform }}
           outputs: type=image,name=${{ secrets.DOCKERHUB_USERNAME }}/x-os,push-by-digest=true,name-canonical=true,push=true
       - name: Note the digest
         if: steps.creds.outputs.have == '1'
@@ -175,8 +186,8 @@ jobs:
         if: steps.creds.outputs.have == '1'
         working-directory: digests
         run: |
-          if [ "$(ls | wc -l)" -ne 2 ]; then
-            echo "expected two digests, have: $(ls)" >&2
+          if [ "$(ls | wc -l)" -ne 3 ]; then
+            echo "expected three digests, have: $(ls)" >&2
             exit 1
           fi
           image="$DOCKERHUB_USERNAME/x-os"
@@ -237,14 +248,14 @@ jobs:
       - name: Publish the release
         working-directory: iso
         run: |
-          if [ ! -s x-os-amd64.iso ] || [ ! -s x-os-arm64.iso ]; then
-            echo "expected two ISO images, have: $(ls)" >&2
+          if [ ! -s x-os-amd64.iso ] || [ ! -s x-os-arm64.iso ] || [ ! -s x-os-armv7.iso ]; then
+            echo "expected three ISO images, have: $(ls)" >&2
             exit 1
           fi
-          sha256sum x-os-amd64.iso x-os-arm64.iso > SHA256SUMS
+          sha256sum x-os-amd64.iso x-os-arm64.iso x-os-armv7.iso > SHA256SUMS
           if gh release view latest > /dev/null 2>&1; then
             gh release delete latest --yes --cleanup-tag
           fi
           gh release create latest --target "$GITHUB_SHA" --title "x-os" \
             --notes "The bootable ISO images, built from $GITHUB_SHA." \
-            x-os-amd64.iso x-os-arm64.iso SHA256SUMS
+            x-os-amd64.iso x-os-arm64.iso x-os-armv7.iso SHA256SUMS
