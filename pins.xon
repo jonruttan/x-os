@@ -10,18 +10,18 @@
 ;
 ; Both tools read this file as text, a row a line.
 
-(source x-lang      "https://github.com/jonruttan/x-lang.git"      "ee7f644f257b5dd72a265fdf9ced6d1cde0bbc76") ; feat/linux-arm, past v0.47.0 until the release that carries it
+(source x-lang      "https://github.com/jonruttan/x-lang.git"      "5644d408b9b756712d9427911e88090b432552fc") ; feat/linux-arm, past v0.47.0 until the release that carries it
 (source x-ash       "https://github.com/jonruttan/x-ash.git"       "9c11bdd086fcb86b8ef6cbbad2e38010df8a92b7") ; main
 (source x-coreutils "https://github.com/jonruttan/x-coreutils.git" "4a0e3dc73edd9a984b0ba4316b41f895fb8ef9f9") ; main
 (source x-grep      "https://github.com/jonruttan/x-grep.git" "c5f16e27e83b355f52f82dd323c9b2ed210e6b34") ; main
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "2f0d1df030f48f3e970aeec0c7113b4a4eca8c95") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "d335336e9357813ffc41cfe0f33ec672cb6a3e33") ; main
-(source x-cc        "https://github.com/jonruttan/x-cc.git" "c29da240dbd6d865a56188587a4abfab80558b6a") ; fix/four-byte-word, past main until x-cc#129 merges
+(source x-cc        "https://github.com/jonruttan/x-cc.git" "53f9727bb287abf618ce1f24a0ab9fc537ebf466") ; main
 (source x-python    "https://github.com/jonruttan/x-python.git" "360f066196497c55459562f24ac748f95db3618c") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "602aa27002edddf1cf3c80a1da04fab8f3207bb7") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "4e429e53f89008beb869280d90e1b22c711e2881") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "7c1b3ae727c224b734c5b67bb650064fe75fa98b") ; main
-(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "3cb8425e37f9f8fc11c9e8b4a80c763ba36a4030") ; main
+(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "91ef79363ebdfac96c352685a28b75f0ea4477cc") ; fix/iv-four-byte-word, past main until x-ssh#57 merges
 (source x-git       "https://github.com/jonruttan/x-git.git" "5e50c099ced1ec6599384cb97c5d7637fc99630e") ; main
 (source x-tmux      "https://github.com/jonruttan/x-tmux.git" "050a6061d8b1cdcb0d030ab54db397e493fb9ae8") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "bbfa006c7c1ed97b57d93f733c9f2aa9a60f8de0") ; main
