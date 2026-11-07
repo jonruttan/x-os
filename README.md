@@ -15,8 +15,7 @@ aarch64
 
 ## Getting it
 
-The container, for `linux/amd64`, `linux/arm64` and `linux/arm/v7` (32-bit
-arm, as a Raspberry Pi running the 32-bit OS is), is on
+The container, for `linux/amd64` and `linux/arm64`, is on
 [Docker Hub](https://hub.docker.com/r/jonruttan/x-os):
 
 ```bash
@@ -30,7 +29,6 @@ The bootable image is an ISO image, one an architecture, on the
 |---|---|---|
 | x86-64 | [x-os-amd64.iso](https://github.com/jonruttan/x-os/releases/download/latest/x-os-amd64.iso) | BIOS or UEFI |
 | arm64 | [x-os-arm64.iso](https://github.com/jonruttan/x-os/releases/download/latest/x-os-arm64.iso) | UEFI |
-| 32-bit arm | [x-os-armv7.iso](https://github.com/jonruttan/x-os/releases/download/latest/x-os-armv7.iso) | UEFI |
 
 It boots as a disc in a virtual machine. It needs
 4 GB of memory. Under QEMU:
@@ -148,8 +146,8 @@ collects every child that ends, and starts the shell again when it ends.
 make test
 ```
 
-`make help` lists the targets. `ARCH` is `amd64`, `arm64` or `armv7` and
-defaults to the host's. The build needs Docker, the container test needs `expect`, and
+`make help` lists the targets. `ARCH` is `amd64` or `arm64` and defaults to
+the host's. The build needs Docker, the container test needs `expect`, and
 the boot tests need QEMU and, for the ISO image, its UEFI firmware.
 
 The builder is Alpine with a C compiler, a shell and make. None of it reaches

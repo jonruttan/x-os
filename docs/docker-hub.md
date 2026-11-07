@@ -6,7 +6,7 @@ the commands are [x-coreutils](https://github.com/jonruttan/x-coreutils).
 
     docker run -it jonruttan/x-os
 
-For `linux/amd64`, `linux/arm64` and `linux/arm/v7`.
+For `linux/amd64` and `linux/arm64`.
 
 ## Commands
 
@@ -32,7 +32,7 @@ For `linux/amd64`, `linux/arm64` and `linux/arm/v7`.
 
 ## Bootable image
 
-The same system as an ISO image, for x86-64, arm64 and 32-bit arm, is on the
+The same system as an ISO image, for x86-64 and arm64, is on the
 [latest release](https://github.com/jonruttan/x-os/releases/tag/latest).
 
 ## Source

@@ -6,7 +6,6 @@
 #   sh build.sh image-langs SOURCES       write every installed lang's image
 #   sh build.sh image-dialects DIALECT... write each dialect's image
 #   sh build.sh streams COMMANDS INIT     write the boot streams
-#   sh build.sh launcher OUT SOURCE...    compile the launcher to OUT
 #   sh build.sh root ROOT COMMANDS ETC    assemble the image's root
 #   sh build.sh warm ROOT                 fill ROOT's code cache
 #
@@ -66,33 +65,18 @@ install_langs() {
 
 # A lang that writes no image would boot from source, which the image has no
 # wrapper to do, so that is an error.
-#
-# Every lang is tried before the step fails, and a failed write's log is
-# printed here: the file it names is inside a build layer that is thrown
-# away, so this output is the only place its words can be read.
 image_langs() {
-	failed=""
 	for dir in "$1"/*/; do
 		if [ ! -f "$dir/lang.xon" ]; then
 			continue
 		fi
 		name=$(lang_name "$dir")
 		clear_code_cache
-		x --image -l "$name" || true
+		x --image -l "$name"
 		if [ ! -f "$share/langs/$name/.images/$name.boot.x.ximg" ]; then
-			echo "build: no state image for $name" >&2
-			for log in "$share/langs/$name/.images"/*.log; do
-				if [ -f "$log" ]; then
-					echo "build: --- $log" >&2
-					cat "$log" >&2
-				fi
-			done
-			failed="$failed $name"
+			fail 1 "no state image for $name"
 		fi
 	done
-	if [ -n "$failed" ]; then
-		fail 1 "no state image for$failed"
-	fi
 }
 
 # The wrapper writes a dialect's image to its cache, in a directory named for
@@ -127,21 +111,6 @@ write_streams() {
 	for how in poweroff reboot halt; do
 		sh "$here/stream.sh" ash "$how" "$init_dir/power.x" "(def %power-how (lit $how))"
 	done
-}
-
-# The launcher, compiled by x-cc where x-cc has an executable format for
-# this machine (-dumpmachine names it) and by the builder's cc where it has
-# none, which is what 32-bit arm is until x-cc writes it.
-build_launcher() {
-	out="$1"
-	shift
-	if machine=$(x -l cc -- -dumpmachine) && [ -n "$machine" ]; then
-		echo "build: x-cc compiles the launcher for $machine"
-		x -l cc -- -o "$out" "$@"
-	else
-		echo "build: x-cc has no executable format for this machine; cc compiles the launcher"
-		cc -o "$out" "$@"
-	fi
 }
 
 # Link a command to the launcher, among the commands: link_command ROOT NAME
@@ -226,9 +195,6 @@ case "$step" in
 		;;
 	streams)
 		write_streams "$@"
-		;;
-	launcher)
-		build_launcher "$@"
 		;;
 	root)
 		assemble_root "$@"

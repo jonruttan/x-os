@@ -31,9 +31,8 @@ fi
 
 # The architecture's name in an image's, and its serial console.  GRUB
 # reaches the serial line itself only where the firmware does not lend it
-# one: a PC's BIOS.  The architecture is the builder's own, as apk names
-# it: uname names the kernel's, which is arm64 under a 32-bit arm build.
-case "$(apk --print-arch)" in
+# one: a PC's BIOS.
+case "$(uname -m)" in
 	x86_64)
 		arch=amd64
 		serial=ttyS0
@@ -44,13 +43,8 @@ case "$(apk --print-arch)" in
 		serial=ttyAMA0
 		grub_serial=
 		;;
-	armv7)
-		arch=armv7
-		serial=ttyAMA0
-		grub_serial=
-		;;
 	*)
-		fail 1 "no ISO image for $(apk --print-arch)"
+		fail 1 "no ISO image for $(uname -m)"
 		;;
 esac
 
