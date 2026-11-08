@@ -17,6 +17,13 @@ if [ -z "$image" ] || [ -z "$platform" ]; then
 	exit 2
 fi
 
+# A frame through SDL3 with a video driver that needs no display: a 4 x 3
+# window, one pixel set to R 200 G 10 B 20 A 255 (0xff140ac8 as a 32-bit
+# word), drawn, read back from the renderer, presented.
+sdl_frame() {
+	printf "x -q -c '%s'" "(import x/sys/sdl) (import x/core/doors int->ptr ptr->str ptr-call ptr-ref ptr-set! str->ptr) (Sdl hint! \"SDL_VIDEO_DRIVER\" \"$1\") (def w (Sdl open \"x-os\" 4 3 1)) (def b (Sdl canvas w)) (ptr-set! (str->ptr b) 20 4279503560 4) (Sdl draw! w b) (def p (Sdl read-pixels w)) (Sdl present! w) (display \"sdl-\") (display (ptr->str (int->ptr (ptr-call (Sdl %sym \"SDL_GetCurrentVideoDriver\"))))) (display \"-frame-\") (write (ptr-ref (str->ptr p) 20 4)) (newline) (Sdl close w)"
+}
+
 # What the shell is given, a command a line.
 script() {
 	printf '%s\n' \
@@ -58,6 +65,10 @@ script() {
 		'export HOME=/root' \
 		'roguelike --version | sed -e s/^/roguelike-/' \
 		'roguelike scores | sed -e s/^/roguelike-/' \
+		"x -q -c '(import x/sys/sdl) (display \"sdl-available-\") (write (Sdl available?)) (newline)'" \
+		"$(sdl_frame offscreen)" \
+		"$(sdl_frame dummy)" \
+		"x -q -c '(import x/sys/sdl) (import x/core/doors int->ptr ptr->str ptr-call) (Sdl hint! \"SDL_AUDIO_DRIVER\" \"dummy\") (Sdl %ok (ptr-call (Sdl %sym \"SDL_Init\") 16) \"audio\") (display \"sdl-audio-\") (display (ptr->str (int->ptr (ptr-call (Sdl %sym \"SDL_GetCurrentAudioDriver\"))))) (newline) (ptr-call (Sdl %sym \"SDL_Quit\"))'" \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
 		'mkdir -p /root/.ssh' \
@@ -118,6 +129,10 @@ WELCOME TO ZORK
 ^x-chess plays [^ ][^ ]*$
 roguelike-x-roguelike 0\.1\.0$
 ^roguelike-No games yet\.$
+^sdl-available-#t$
+^sdl-offscreen-frame-4279503560$
+^sdl-dummy-frame-4279503560$
+^sdl-audio-dummy$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
@@ -154,4 +169,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, chess and roguelike"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, chess, roguelike and SDL3"
