@@ -1,3 +1,15 @@
+# SDL3, for x's Sdl, which opens libSDL3.so.0 with dlopen.  It is the one
+# library in the root that x did not write, by Jon's ruling for Delve's
+# window.  Built from the release's source against musl with only the
+# drivers that need nothing else in the root: dummy and offscreen video, and
+# dummy and disk audio.  The release is pinned by its digest.
+FROM alpine:3.20 AS sdl
+ARG SDL_VERSION=3.4.20
+ARG SDL_SHA256=f3bb06f55bed9557227a700af2ea62e49497ebdf58037732a731a5fb3ef8581f
+RUN apk add --no-cache build-base cmake curl linux-headers
+COPY tools/sdl.sh /src/tools/sdl.sh
+RUN sh /src/tools/sdl.sh "$SDL_VERSION" "$SDL_SHA256" /out
+
 # The builder is the pre-x floor: it has a shell, a C compiler and make, and
 # none of it reaches the final image.  Alpine, so the engine links against musl.
 FROM alpine:3.20 AS build
@@ -51,6 +63,7 @@ RUN x -l cc -- -o /usr/libexec/x/launch /src/launch/launch.c /src/launch/x.c
 
 COPY etc /src/etc
 RUN sh /src/tools/build.sh root /rootfs /src/commands.xon /src/etc
+COPY --from=sdl /out/ /rootfs/
 RUN apk add --no-cache expect && sh /src/tools/build.sh warm /rootfs
 
 # Zork I, which Microsoft published under the MIT licence, for infocom to play.
