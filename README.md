@@ -50,16 +50,13 @@ serial line.
 | `/usr/share/x` | the library, the langs and their state images |
 | `/usr/share/x/launch` | one boot stream a command |
 | `/usr/bin`, `/init` | links to the launcher; `/bin` is a link to `/usr/bin` |
-| `/usr/lib/libSDL3.so.0` | SDL3, for x's `Sdl`: dummy and offscreen video, dummy and disk audio |
 
 The container is that root. The bootable image is the same root as an
 initramfs, beside a kernel; the kernel is Alpine's `linux-virt`. The ISO
 image holds the two and GRUB, which starts the kernel.
 
 Once the kernel runs there is no shell but x-ash and no C program but the
-launcher, which is also the `x` command, and the engine. SDL3 is the one
-library x did not write, loaded by x's `Sdl` with dlopen; with no display
-driver aboard, its windows draw off screen.
+launcher, which is also the `x` command, and the engine.
 
 ## Commands
 
