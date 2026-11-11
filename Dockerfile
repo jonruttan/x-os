@@ -68,8 +68,21 @@ CMD ["/bin/sh"]
 # kernel is Alpine's, and /dev/console is there because the kernel opens it
 # for init before init can mount devtmpfs.
 FROM alpine:3.20 AS initramfs
-RUN apk add --no-cache linux-virt
+RUN apk add --no-cache linux-virt kmod
 COPY --from=build /rootfs /rootfs
+# The drivers behind a screen, keys and sound, which the kernel has as
+# modules: init loads each file named in the order file, in that order, a
+# module's own needs first.  They are unpacked, so the kernel takes them as
+# they are.  virtio-gpu and bochs are the screens QEMU gives; the keyboard on
+# a PC is built in, and evdev gives it and virtio's a device to be read.
+ARG MODULES="virtio_gpu bochs evdev virtio_input virtio_snd"
+RUN set -e; v=$(ls /lib/modules); d=/rootfs/lib/modules/x-os; mkdir -p $d; \
+    for m in $MODULES; do modprobe -S $v --show-depends $m; done > /tmp/deps; \
+    awk '$1 == "insmod" && !seen[$2]++ { print $2 }' /tmp/deps > /tmp/files; \
+    while read -r ko; do \
+      n=$(basename $ko .gz); gunzip -c $ko > $d/$n; echo $n >> $d/order; \
+    done < /tmp/files; \
+    test -s $d/order
 RUN mknod -m 600 /rootfs/dev/console c 5 1 \
  && mkdir /out \
  && cp /boot/vmlinuz-virt /out/vmlinuz \
