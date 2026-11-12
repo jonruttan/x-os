@@ -15,6 +15,7 @@
 (def %init-open (syscall-door (lit open)))
 (def %init-read (syscall-door (lit read)))
 (def %init-close (syscall-door (lit close)))
+(def %init-finit-module (syscall-door (lit finit_module)))
 (def %init-make-str (prim-ref (lit str) (lit make)))
 
 (def %init-shell "/bin/sh")
@@ -50,6 +51,34 @@
       ((eq? rows ()) ())
       (#t (do (%init-mount-row (first rows))
               (self (rest rows)))))))
+
+; The drivers the kernel has as modules, which the boot image carries
+; unpacked with an order file naming them, a module's own needs first.  A
+; driver with no device of its own loads and waits; one the kernel already
+; has (-17) is passed over, and any other refusal is reported and the boot
+; goes on.  The container root has no order file and loads nothing.
+(def %init-modules "/lib/modules/x-os/")
+
+(def %init-load-module
+  (fn (_ name)
+    (def fd (%init-open (Str8 append %init-modules name) 0 0))
+    (def r (match ((< fd 0) fd) (#t (%init-finit-module fd "" 0))))
+    (match ((< fd 0) ()) (#t (%init-close fd)))
+    (match
+      ((or (= r 0) (= r -17)) ())
+      (#t (%init-say "cannot load " name " (" r ")")))))
+
+(def %init-load-modules
+  (fn (_)
+    (def fd (%init-open (Str8 append %init-modules "order") 0 0))
+    (def buf (%init-make-str 4096))
+    (def n (match ((< fd 0) 0) (#t (%init-read fd buf 4096))))
+    (match ((< fd 0) ()) (#t (%init-close fd)))
+    (match
+      ((< n 1) ())
+      (#t (List for-each
+            (fn (_ name) (match ((Str8 empty? name) ()) (#t (%init-load-module name))))
+            (Str8 split "\n" (Str8 sub 0 n buf)))))))
 
 ; The terminal behind the console.  /dev/console cannot be a controlling
 ; terminal; the kernel names the devices it stands for, last one first in
@@ -115,6 +144,7 @@
     (Sys dup2 3 0)
     (Sys close 3)
     (%init-mount-all %init-mounts)
+    (%init-load-modules)
     (%init-serve (%init-spawn))))
 
 (%init-main)
