@@ -26,8 +26,10 @@ For `linux/amd64` and `linux/arm64`.
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): a window of panes, each a shell; C-b `%` and `"` split, `o` switches, `x` kills, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
 | `browse` | [x-browse](https://github.com/jonruttan/x-browse): a terminal browser for Markdown, local or over http(s), with tabs and history; `browse --dump` writes a page out with its references |
 | `chess` | [x-chess](https://github.com/jonruttan/x-chess): a chess engine; on a terminal a game against it, in SAN or long algebraic, with `help` for the commands; fed lines that start with `uci`, the Universal Chess Interface |
+| `roguelike` | [x-roguelike](https://github.com/jonruttan/x-roguelike): a dungeon crawl of rooms, creatures, things to work out and one life, its content read from a set of `.xon` files; `?` lists the keys, `S` saves, `roguelike scores` lists the best games |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
+| `poweroff`, `reboot`, `halt` | flush and make the `reboot` system call |
 | every other | an x-coreutils applet |
 
 ## Bootable image
