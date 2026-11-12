@@ -1,17 +1,19 @@
 # x-os
 
 The Linux kernel, [x](https://github.com/jonruttan/x-lang) and its languages,
-as a container and as a bootable image. It boots into
+and nothing else, as a container and as a bootable image. It boots into
 [x-ash](https://github.com/jonruttan/x-ash) and its commands are
-[x-coreutils](https://github.com/jonruttan/x-coreutils).
+[x-coreutils](https://github.com/jonruttan/x-coreutils): the shell, the
+editor, `cc`, `git`, `ssh`, `make` and every other command is a language
+hosted on x.
 
 ```
-$ docker run -it x-os
-ASH Shell v0.1.0 on x-lang 9e0b1d04b5ef, engine v0.2.14
-exit or ctrl-d to leave
+$ docker run -it jonruttan/x-os
 # uname -m
 aarch64
 ```
+
+The shell opens with a line naming its version, x-lang's and the engine's.
 
 ## Getting it
 
@@ -70,7 +72,7 @@ launcher, which is also the `x` command, and the engine.
 | `python` | [x-python](https://github.com/jonruttan/x-python) |
 | `logo` | [x-logo](https://github.com/jonruttan/x-logo) |
 | `make` | [x-make](https://github.com/jonruttan/x-make) |
-| `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I |
+| `infocom` | [x-infocom](https://github.com/jonruttan/x-infocom): a Z-machine; `infocom /usr/share/infocom/zork1.z3` plays Zork I, which Microsoft published under the MIT licence; `LICENSE.zork1` is beside it |
 | `sshd`, `ssh`, `ssh-keygen`, `scp`, `sftp`, `sftp-server`, `ssh-agent`, `ssh-add` | [x-ssh](https://github.com/jonruttan/x-ssh): OpenSSH's server, client, key tool, scp, SFTP and agent |
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): numbered windows of panes, each a shell, named after its program; C-b `%` and `"` split, `o`, `;` and the arrows switch, `q` numbers the panes, `z` zooms, C-arrows and M-arrows resize, `{` `}` swap, C-o and M-o rotate, M-1 to M-7 and Space lay out, `x` kills, `c` makes a window, `n` `p` `l` `0`-`9` show one, `&` kills one, `,` renames one, `:` runs tmux's commands, `bind`, `set` and `source-file` read from `~/.tmux.conf` or `-f FILE`, `d` detaches, `[` scrolls back, selects and copies, `]` pastes; `tmux attach`, `ls` and `kill-server` reach the server |
@@ -85,7 +87,7 @@ launcher, which is also the `x` command, and the engine.
 `commands.xon` names the commands that are a lang of their own. A row may
 name an entry of this repository's in place of the lang's: `make` starts at
 `init/make.x`, which builds with no arguments where x-make's own entry
-starts a session; the four commands of x-ssh start at `init/ssh.x`;
+starts a session; the eight commands of x-ssh start at `init/ssh.x`;
 x-git's three start at `init/git.x`; `tmux` starts at `init/tmux.x`, which
 opens a session with no arguments, as tmux does, where x-tmux's own entry
 starts a REPL; `browse` starts at `init/browse.x`, which browses the current
@@ -133,7 +135,9 @@ image is published. The token must be allowed to read, write and delete.
 
 ## Process 1
 
-`init/init.x` mounts `/proc`, `/sys`, `/dev`, `/tmp` and `/run`, starts the
+`init/init.x` mounts `/proc`, `/sys`, `/dev`, `/tmp` and `/run`, loads the
+screen, keyboard and sound drivers the bootable image carries under
+`/lib/modules/x-os` (the container carries none), starts the
 shell in its own session with the terminal as its controlling terminal,
 collects every child that ends, and starts the shell again when it ends.
 
@@ -157,7 +161,9 @@ image's own `cc`, x-cc.
 ## Pins
 
 `pins.xon` names each source by commit. `make fetch` acquires them into
-`build/src` and refuses a checkout whose commit is not the one named.
+`build/src` and refuses a checkout whose commit is not the one named. The
+engine has no row: the build takes the one x-lang's own pin names and
+builds it from source against musl.
 
 It also says what each source tracks: its highest version tag, or the head of
 its main branch. `tools/pins-update.sh` moves the pins to the newest tracked
@@ -171,5 +177,9 @@ what moved. The image is rebuilt and published when that is merged.
 - ctrl-C at the prompt ends the shell; process 1 starts another.
 - `logo` does not read a piped program: a program goes in a file,
   `x -l logo -f FILE`.
-- `cc` is x-cc, whose `run` executes a C program. It writes no executable
-  here: what it writes is Mach-O.
+
+## Licence
+
+MIT No Attribution (MIT-0). See [LICENSE](LICENSE). The langs the image
+is built from are MIT-0 in their own repositories, and Zork I is under
+Microsoft's MIT licence.
