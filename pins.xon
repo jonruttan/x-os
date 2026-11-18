@@ -23,7 +23,7 @@
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "06376e6dae65dd659fa783e0244315c6684f5584") ; main
 (source x-ssh       "https://github.com/jonruttan/x-ssh.git" "f69bd5a52a5aa31d146c6814c0cd9df2ffa53b6d") ; main
 (source x-git       "https://github.com/jonruttan/x-git.git" "97a942a2ae824b91388090667a3814599f272d6d") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "b5275b944165943a60c45c92f4bb47e9b4b2f4c4") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "c30f9dff379d0e4172f2e0081f2a9aeb91251369") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "95fb171a1305e7d61f8b5d7e0b5697b87f49ce60") ; main
 (source x-chess     "https://github.com/jonruttan/x-chess.git" "0df12d91b925f0b6b3382ce253074484a48fceed") ; main
 (source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "3b99006622a1bca9f7f30c2ab2b496e20cf2c9b3") ; main
