@@ -35,3 +35,4 @@
 (command browse           browse "browse.x")
 (command chess            chess "chess.x")
 (command roguelike        roguelike "roguelike.x")
+(command doc              doc "doc.x")

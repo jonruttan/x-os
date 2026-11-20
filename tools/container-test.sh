@@ -51,6 +51,9 @@ script() {
 		'browse --dump /tmp/page.md | head -3 | sed -e s/^/browse-/' \
 		"printf '<h1>Html</h1><p>An <a href=b.html>anchor</a>.</p>\\n' > /tmp/page.html" \
 		'browse --dump /tmp/page.html | head -3 | sed -e s/^/browse-/' \
+		'doc -t markdown /tmp/page.html | sed -e s/^/doc-/' \
+		'doc -i /tmp/page.md | grep -e format -e headings | sed -e s/^/doc-/' \
+		'doc /tmp/page.md /tmp/page.pdf && doc -i /tmp/page.pdf | grep pages | sed -e s/^/doc-/' \
 		'chess --perft 2 | sed -e s/^/chess-perft-/' \
 		"printf 'uci\\nposition startpos moves e2e4\\ngo depth 1\\n' | chess | grep -e uciok -e bestmove | sed -e s/^/chess-/" \
 		"printf 'e4\\n' | chess --depth 1 | grep plays | sed -e 's/  (.*//'" \
@@ -112,6 +115,11 @@ WELCOME TO ZORK
 ^browse-A \[1\]link\.$
 ^browse-Html$
 ^browse-An \[1\]anchor\.$
+^doc-# Html$
+^doc-An \[anchor\](b\.html)\.$
+^doc-format   markdown$
+^doc-headings 1$
+^doc-pages    1$
 ^chess-perft-400$
 ^chess-uciok$
 ^chess-bestmove g8f6$
@@ -154,4 +162,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, chess and roguelike"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, doc, chess and roguelike"

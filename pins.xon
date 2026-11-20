@@ -27,6 +27,7 @@
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "b4a48d96458ccd9bc565b75a8ef9ead28dbe8833") ; main
 (source x-chess     "https://github.com/jonruttan/x-chess.git" "f40dcf66072c9be6353350fda4ede3ebaccfbd5d") ; main
 (source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "29b5d4f8860bebc4512208697d352bbd0096f4bb") ; main
+(source x-doc       "https://github.com/jonruttan/x-doc.git" "f80c912575377c1faebc93cb65bf69d70c423e8e") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -45,3 +46,4 @@
 (track x-browse    main)
 (track x-chess     main)
 (track x-roguelike main)
+(track x-doc       main)
