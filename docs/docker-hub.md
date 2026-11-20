@@ -25,6 +25,7 @@ For `linux/amd64` and `linux/arm64`.
 | `git`, `git-upload-pack`, `git-receive-pack` | [x-git](https://github.com/jonruttan/x-git): git, and the services a client of this machine's repositories runs over ssh or a file:// url |
 | `tmux` | [x-tmux](https://github.com/jonruttan/x-tmux): a window of panes, each a shell; C-b `%` and `"` split, `o` switches, `x` kills, `d` detaches, `[` scrolls back; `tmux attach`, `ls` and `kill-server` reach the server |
 | `browse` | [x-browse](https://github.com/jonruttan/x-browse): a terminal browser for Markdown, local or over http(s), with tabs and history; `browse --dump` writes a page out with its references |
+| `doc` | [x-doc](https://github.com/jonruttan/x-doc): documents shown, described and converted: `doc FILE` lays one out as text, `doc -i FILE` says what it is, and `doc FILE OUTPUT` writes it as Markdown, HTML, a PDF or text |
 | `chess` | [x-chess](https://github.com/jonruttan/x-chess): a chess engine; on a terminal a game against it, in SAN or long algebraic, with `help` for the commands; fed lines that start with `uci`, the Universal Chess Interface |
 | `roguelike` | [x-roguelike](https://github.com/jonruttan/x-roguelike): a dungeon crawl of rooms, creatures, things to work out and one life, its content read from a set of `.xon` files; `?` lists the keys, `S` saves, `roguelike scores` lists the best games |
 | `vi` | the editor, an x-coreutils applet |
