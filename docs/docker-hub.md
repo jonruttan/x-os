@@ -28,6 +28,7 @@ For `linux/amd64` and `linux/arm64`.
 | `doc` | [x-doc](https://github.com/jonruttan/x-doc): documents shown, described and converted: `doc FILE` lays one out as text, `doc -i FILE` says what it is, and `doc FILE OUTPUT` writes it as Markdown, HTML, a PDF or text |
 | `chess` | [x-chess](https://github.com/jonruttan/x-chess): a chess engine; on a terminal a game against it, in SAN or long algebraic, with `help` for the commands; fed lines that start with `uci`, the Universal Chess Interface |
 | `roguelike` | [x-roguelike](https://github.com/jonruttan/x-roguelike): a dungeon crawl of rooms, creatures, things to work out and one life, its content read from a set of `.xon` files; `?` lists the keys, `S` saves, `roguelike scores` lists the best games |
+| `htop` | [x-top](https://github.com/jonruttan/x-top): an interactive process viewer after htop: meters for each CPU, memory and swap, the processes sorted by any column, flat or as a tree; `/` searches, `\` filters, `u` shows one user's, F9 sends a signal, F7 and F8 change the nice value, F1 lists the keys; `htop -D` draws one screen to standard output |
 | `vi` | the editor, an x-coreutils applet |
 | `x` | x itself: `x`, `x -l xe`, `x -l LANG` |
 | `poweroff`, `reboot`, `halt` | flush and make the `reboot` system call |

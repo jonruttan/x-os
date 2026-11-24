@@ -36,3 +36,4 @@
 (command chess            chess "chess.x")
 (command roguelike        roguelike "roguelike.x")
 (command doc              doc "doc.x")
+(command htop             top "htop.x")

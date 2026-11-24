@@ -10,7 +10,7 @@
  *   the image loader              lib/img.x and tools/dev/image-read.x
  *   (set! %batch? ())             when there is a session to hand over
  *   (guard (_ ()) (batch))        when the engine runs in batch
- *   the lang's entry              a lang bundle's run.x
+ *   the lang's entry              a bundle's <share>/launch/NAME.run: NAME/run, then its main
  *   the files                     -F's, then -f's; a dialect's as (include "FILE")
  *   stdin                         piped program text, for a dialect
  *   the expressions               -c's, one a line
@@ -508,7 +508,7 @@ static enum options_result read_options(int argc, char *argv[],
 
 /**
  * Find a dialect or a lang bundle by name.  A dialect has an entry among
- * the boot files; a lang has a declaration among the langs.  Either boots
+ * the boot files; a lang has a bundle.xon among the bundles.  Either boots
  * from its state image, which must be there.
  *
  * @param name  const char* -- The name -l gave, or the default
@@ -526,9 +526,9 @@ static int find_lang(const char *name, struct lang *lang)
 	if (path_append(dialect_entry, SHARE "/boot/") < 0
 		|| path_append(dialect_entry, name) < 0
 		|| path_append(dialect_entry, ".x") < 0
-		|| path_append(declaration, SHARE "/langs/") < 0
+		|| path_append(declaration, SHARE "/bundles/") < 0
 		|| path_append(declaration, name) < 0
-		|| path_append(declaration, "/lang.xon") < 0) {
+		|| path_append(declaration, "/bundle.xon") < 0) {
 		print_error("lang name too long: ", name, NULL);
 		return -1;
 	}
@@ -544,14 +544,14 @@ static int find_lang(const char *name, struct lang *lang)
 	}
 	else if (path_exists(declaration)) {
 		lang->is_bundle = 1;
-		path_append(lang->image, SHARE "/langs/");
+		path_append(lang->image, SHARE "/bundles/");
 		path_append(lang->image, name);
 		path_append(lang->image, "/.images/");
 		path_append(lang->image, name);
 		path_append(lang->image, ".boot.x.ximg");
-		path_append(lang->entry, SHARE "/langs/");
+		path_append(lang->entry, SHARE "/launch/");
 		path_append(lang->entry, name);
-		path_append(lang->entry, "/run.x");
+		path_append(lang->entry, ".run");
 	}
 	else {
 		print_error("no dialect or lang named '", name, "'");

@@ -26,9 +26,9 @@ fail() {
 	exit "$status"
 }
 
-# The name a lang declares in its lang.xon: lang_name DIR
+# The name a bundle declares in its bundle.xon: lang_name DIR
 lang_name() {
-	sed -n 's/^(lang "\(.*\)").*/\1/p' "$1/lang.xon"
+	sed -n 's/^(name "\(.*\)").*/\1/p' "$1/bundle.xon"
 }
 
 # The commands commands.xon names, as NAME LANG [ENTRY] lines: command_rows FILE
@@ -51,11 +51,11 @@ clear_code_cache() {
 	rm -f /tmp/x-asm-*
 }
 
-# Every source but the platform is a lang.  All are installed before any is
-# imaged, since a lang may require another.
+# Every source but the platform is a bundle.  All are installed before any is
+# imaged, since a bundle may require another.
 install_langs() {
 	for dir in "$1"/*/; do
-		if [ ! -f "$dir/lang.xon" ]; then
+		if [ ! -f "$dir/bundle.xon" ]; then
 			continue
 		fi
 		clear_code_cache
@@ -67,13 +67,13 @@ install_langs() {
 # wrapper to do, so that is an error.
 image_langs() {
 	for dir in "$1"/*/; do
-		if [ ! -f "$dir/lang.xon" ]; then
+		if [ ! -f "$dir/bundle.xon" ]; then
 			continue
 		fi
 		name=$(lang_name "$dir")
 		clear_code_cache
 		x --image -l "$name"
-		if [ ! -f "$share/langs/$name/.images/$name.boot.x.ximg" ]; then
+		if [ ! -f "$share/bundles/$name/.images/$name.boot.x.ximg" ]; then
 			fail 1 "no state image for $name"
 		fi
 	done
@@ -99,6 +99,7 @@ write_streams() {
 	init_dir="$2"
 
 	sh "$here/stream.sh" --loader
+	sh "$here/stream.sh" --runs
 	sh "$here/stream.sh" coreutils coreutils
 	command_rows "$commands_file" | while read -r name lang entry; do
 		if [ -n "$entry" ]; then

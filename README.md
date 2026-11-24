@@ -80,6 +80,7 @@ launcher, which is also the `x` command, and the engine.
 | `doc` | [x-doc](https://github.com/jonruttan/x-doc): documents shown, described and converted: `doc FILE` lays one out as text, `doc -i FILE` says what it is, and `doc FILE OUTPUT` writes it as Markdown, HTML, a PDF or text |
 | `chess` | [x-chess](https://github.com/jonruttan/x-chess): a chess engine; on a terminal a game against it, in SAN or long algebraic, with `help` for the commands; fed lines that start with `uci`, the Universal Chess Interface |
 | `roguelike` | [x-roguelike](https://github.com/jonruttan/x-roguelike): a dungeon crawl of rooms, creatures, things to work out and one life, its content read from a set of `.xon` files; `?` lists the keys, `S` saves, `roguelike scores` lists the best games |
+| `htop` | [x-top](https://github.com/jonruttan/x-top): an interactive process viewer after htop: meters for each CPU, memory and swap, the processes sorted by any column, flat or as a tree; `/` searches, `\` filters, `u` shows one user's, F9 sends a signal, F7 and F8 change the nice value, F1 lists the keys; `htop -D` draws one screen to standard output |
 | `vi` | x-coreutils' editor |
 | `x` | x itself: a dialect or any lang, as below |
 | `poweroff`, `reboot`, `halt` | `init/power.x` |
@@ -95,7 +96,8 @@ starts a REPL; `browse` starts at `init/browse.x`, which browses the current
 directory with no arguments; `chess` starts at `init/chess.x`, which starts
 a game with no arguments; `roguelike` starts at `init/roguelike.x`, which
 plays with no arguments; `doc` starts at `init/doc.x`, which prints the
-usage with no arguments. A
+usage with no arguments; `htop` starts at `init/htop.x`, which shows the
+processes with no arguments. A
 command started at an entry of this repository's finds its own name in
 `%command`, which picks x-ssh's program or x-git's service.
 

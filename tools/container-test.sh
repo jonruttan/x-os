@@ -61,6 +61,8 @@ script() {
 		'export HOME=/root' \
 		'roguelike --version | sed -e s/^/roguelike-/' \
 		'roguelike scores | sed -e s/^/roguelike-/' \
+		'htop -V | sed -e s/^/htop-/' \
+		'COLUMNS=100 LINES=12 htop -D -d 2 | grep -e "PID USER" | sed -e "s/^ */htop-/" -e "s/  .*//"' \
 		'mkdir -p /etc/ssh && ssh-keygen -A > /dev/null' \
 		"ssh-keygen -q -t ed25519 -N '' -f /tmp/userkey" \
 		'mkdir -p /root/.ssh' \
@@ -126,6 +128,8 @@ WELCOME TO ZORK
 ^x-chess plays [^ ][^ ]*$
 roguelike-x-roguelike 0\.1\.0$
 ^roguelike-No games yet\.$
+^htop-x-top 0\.1\.0$
+^htop-PID USER$
 ^ssh-says-42$
 ^agent-says-36$
 ^alice-uid-1000-in-/home/alice$
@@ -162,4 +166,4 @@ if [ "$failed" -ne 0 ]; then
 	printf '%s\n' "--- output" "$out" >&2
 	exit 1
 fi
-echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, doc, chess and roguelike"
+echo "container-test: $platform ran the shell, the applets, a pipeline, grep, sed, awk, cc, x, logo, python, make, infocom, ssh, its agent, a second user, git, tmux, browse, doc, chess, roguelike and htop"

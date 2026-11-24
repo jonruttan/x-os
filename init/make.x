@@ -3,5 +3,5 @@
 ; x-make's own entry builds when it has arguments and starts a session when
 ; it has none.  A make with no arguments builds the default goal, so the
 ; command always builds.
-(import mk/base)
+(import make/cli mk-main)
 (mk-main (rest (Sys args (lit program))))
