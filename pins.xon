@@ -17,16 +17,16 @@
 (source x-sed       "https://github.com/jonruttan/x-sed.git" "2c3b65e7d438180f19230a24e731bedad57a0bdd") ; main
 (source x-awk       "https://github.com/jonruttan/x-awk.git" "ecf33d20b1094fe1336aebc79f9576ee95e6c46a") ; main
 (source x-cc        "https://github.com/jonruttan/x-cc.git" "3f2a2406011caa31466b44fb76cfc44c67c13fcb") ; main
-(source x-python    "https://github.com/jonruttan/x-python.git" "ed96e54c80af02cf92b252a5ae44d845ebbf1f85") ; main
+(source x-python    "https://github.com/jonruttan/x-python.git" "1b8e34890ee1a56d80c322c4cd34ea7b041b4234") ; main
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "dcd8d14a16fd0a01503fb6522bb5e9161a1c7030") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "227184ceadc498a7b6399b157c957aa90f33e959") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "123308f12dad03ee238e53f49f97568c590eb3b6") ; main
-(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "2123f1ff0e4159d8fb79e4976a06a9b30393602f") ; main
-(source x-git       "https://github.com/jonruttan/x-git.git" "2bc481502f0730b716d6f226e10c8728cc931623") ; main
+(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "70ca9e69ff820d706df23ec4fbe1d9cf199b5a3a") ; main
+(source x-git       "https://github.com/jonruttan/x-git.git" "b13bb19169ede8fe560ccc765ba51dbe90692ac7") ; main
 (source x-tmux      "https://github.com/jonruttan/x-tmux.git" "689c9ee1117775197eece9ec2d0688ec21823467") ; main
 (source x-browse    "https://github.com/jonruttan/x-browse.git" "ddcd2ba3f924dbd56a88ff77d62f50912682fbd3") ; main
-(source x-chess     "https://github.com/jonruttan/x-chess.git" "3f2589f42a0051b4e4ce57c29fc180954712eea7") ; main
-(source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "aab75c0fc6810b2fee466c933e974275cff016fd") ; main
+(source x-chess     "https://github.com/jonruttan/x-chess.git" "b7fb9a7452bae5dd00731fea5627418a0682a1cb") ; main
+(source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "9a6fc971a3272ae1723df8c8b1d47153d7003e27") ; main
 (source x-doc       "https://github.com/jonruttan/x-doc.git" "66ced13de344e49abd52a7a51bb1be1c9a76c279") ; main
 (source x-top       "https://github.com/jonruttan/x-top.git" "610d802ec734201371733b72b0db02b32a29d6f5") ; main
 
