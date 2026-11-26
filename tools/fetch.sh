@@ -40,7 +40,8 @@ fi
 mkdir -p "$OUT"
 printf '%s\n' "$rows" | while read -r name url commit; do
 	dest="$OUT/$name"
-	if [ -f "$dest/.commit" ] && [ "$(cat "$dest/.commit")" = "$commit" ]; then
+	if [ -f "$dest/.commit" ] && [ -f "$dest/.version" ] \
+		&& [ "$(cat "$dest/.commit")" = "$commit" ]; then
 		echo "fetch: $name is at $commit"
 		continue
 	fi
@@ -58,6 +59,12 @@ printf '%s\n' "$rows" | while read -r name url commit; do
 	git -C "$tmp" checkout -q FETCH_HEAD
 	rm -rf "$tmp/.git"
 	printf '%s\n' "$commit" > "$tmp/.commit"
+	# The tag the commit carries, read from the remote, since the checkout
+	# keeps no history to describe itself from: a bundle that requires
+	# another at a version compares it with this.  Empty when untagged.
+	git ls-remote --tags "$url" \
+		| sed -n "s|^$commit	refs/tags/\([^^]*\)\(^{}\)\{0,1\}\$|\1|p" \
+		| sort -u | tail -1 > "$tmp/.version"
 	rm -rf "$dest"
 	mv "$tmp" "$dest"
 	echo "fetch: $name fetched at $commit"
