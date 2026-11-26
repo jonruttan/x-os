@@ -51,6 +51,17 @@ clear_code_cache() {
 	rm -f /tmp/x-asm-*
 }
 
+# The version a bundle is installed as: the tag its pinned commit carries,
+# which fetch.sh recorded, or the commit when it carries none.  A bundle that
+# requires another at a version compares it with this: bundle_version DIR
+bundle_version() {
+	if [ -s "$1/.version" ]; then
+		cat "$1/.version"
+	else
+		cut -c1-12 "$1/.commit"
+	fi
+}
+
 # Every source but the platform is a bundle.  All are installed before any is
 # imaged, since a bundle may require another.
 install_langs() {
@@ -59,15 +70,17 @@ install_langs() {
 			continue
 		fi
 		clear_code_cache
-		make -C "$dir" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$dir/.commit")"
+		make -C "$dir" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$dir/.commit")" \
+			BUNDLE_VERSION="$(bundle_version "$dir")"
 	done
 }
 
 # A lang that writes no image would boot from source, which the image has no
-# wrapper to do, so that is an error.
+# wrapper to do, so that is an error.  A library lists no entry: it is
+# imported into the images of the bundles that require it, and has none.
 image_langs() {
 	for dir in "$1"/*/; do
-		if [ ! -f "$dir/bundle.xon" ]; then
+		if [ ! -f "$dir/bundle.xon" ] || ! grep -q '^(entry ' "$dir/bundle.xon"; then
 			continue
 		fi
 		name=$(lang_name "$dir")
