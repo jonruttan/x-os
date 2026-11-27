@@ -21,15 +21,16 @@
 (source x-logo      "https://github.com/jonruttan/x-logo.git" "dcd8d14a16fd0a01503fb6522bb5e9161a1c7030") ; main
 (source x-make      "https://github.com/jonruttan/x-make.git" "227184ceadc498a7b6399b157c957aa90f33e959") ; main
 (source x-infocom   "https://github.com/jonruttan/x-infocom.git" "123308f12dad03ee238e53f49f97568c590eb3b6") ; main
-(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "9f893f3720e61db3999a8a4812b01907780a15bd") ; main
-(source x-git       "https://github.com/jonruttan/x-git.git" "3b8fcaefbd9e5f0fa432405135e96b22d3efc9f5") ; main
-(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "bf310a9eeb71e8022cb9c1a5c994f9d28bc3a221") ; main
-(source x-browse    "https://github.com/jonruttan/x-browse.git" "a4ffc34fd83bacc87b26e8992dea504396c4bf7c") ; main
-(source x-chess     "https://github.com/jonruttan/x-chess.git" "759fcbc5cf8cd344bc7d3420c31cf0d4e4a2c180") ; main
+(source x-ssh       "https://github.com/jonruttan/x-ssh.git" "70ca9e69ff820d706df23ec4fbe1d9cf199b5a3a") ; main
+(source x-git       "https://github.com/jonruttan/x-git.git" "b13bb19169ede8fe560ccc765ba51dbe90692ac7") ; main
+(source x-tmux      "https://github.com/jonruttan/x-tmux.git" "689c9ee1117775197eece9ec2d0688ec21823467") ; main
+(source x-browse    "https://github.com/jonruttan/x-browse.git" "ddcd2ba3f924dbd56a88ff77d62f50912682fbd3") ; main
+(source x-chess     "https://github.com/jonruttan/x-chess.git" "b7fb9a7452bae5dd00731fea5627418a0682a1cb") ; main
 (source x-roguelike "https://github.com/jonruttan/x-roguelike.git" "9a6fc971a3272ae1723df8c8b1d47153d7003e27") ; main
 (source x-doc       "https://github.com/jonruttan/x-doc.git" "66ced13de344e49abd52a7a51bb1be1c9a76c279") ; main
 (source x-top       "https://github.com/jonruttan/x-top.git" "6b4b268186729b77ceb7d417b037bb80480d7dc6") ; main
 (source x-lib-gfx   "https://github.com/jonruttan/x-lib-gfx.git" "0bce87dc3ac167658df826efeae761f7d4466874") ; v0.1.0
+(source x-bundle    "https://github.com/jonruttan/x-bundle.git" "9f9fdd213b053309ec022011fd4991c6f86b7841") ; main
 
 (track x-lang      release)
 (track x-ash       main)
@@ -51,3 +52,4 @@
 (track x-doc       main)
 (track x-top       main)
 (track x-lib-gfx   release)
+(track x-bundle    main)
