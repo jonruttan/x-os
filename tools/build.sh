@@ -62,16 +62,36 @@ bundle_version() {
 	fi
 }
 
+# Install one bundle: install_bundle SOURCES DIR
+#
+# A bundle with a Makefile installs itself.  One with none is installed by
+# the bundle tool from its directory, which writes no version stamp, so the
+# stamp is written after.  The tool is run from the sources, where it is
+# found under the name its bundle.xon declares, so it can install itself.
+install_bundle() {
+	clear_code_cache
+	if [ -f "$2/Makefile" ]; then
+		make -C "$2" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$2/.commit")" \
+			BUNDLE_VERSION="$(bundle_version "$2")"
+	else
+		X_BUNDLE_DIR="$1/" x -l bundle -- install "$2" --dir "$share/bundles"
+		bundle_version "$2" > "$share/bundles/$(lang_name "$2")/version"
+	fi
+}
+
 # Every source but the platform is a bundle.  All are installed before any is
-# imaged, since a bundle may require another.
+# imaged, since a bundle may require another.  The bundle tool goes first: a
+# bundle's own install may run it.
 install_langs() {
 	for dir in "$1"/*/; do
-		if [ ! -f "$dir/bundle.xon" ]; then
-			continue
+		if [ -f "$dir/bundle.xon" ] && [ "$(lang_name "$dir")" = bundle ]; then
+			install_bundle "$1" "$dir"
 		fi
-		clear_code_cache
-		make -C "$dir" install PREFIX=/usr LANG_VERSION="$(cut -c1-12 "$dir/.commit")" \
-			BUNDLE_VERSION="$(bundle_version "$dir")"
+	done
+	for dir in "$1"/*/; do
+		if [ -f "$dir/bundle.xon" ] && [ "$(lang_name "$dir")" != bundle ]; then
+			install_bundle "$1" "$dir"
+		fi
 	done
 }
 
